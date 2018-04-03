@@ -19,8 +19,4 @@
 #include <boost/asio.hpp>
 #include "../unit_test.hpp"
 
-BOOST_ASIO_TEST_SUITE
-(
-  "windows/basic_handle",
-  BOOST_ASIO_TEST_CASE(null_test)
-)
+BOOST_ASIO_TEST_SUITE("windows/basic_handle", BOOST_ASIO_TEST_CASE(null_test))

@@ -12,7 +12,7 @@
 #define BOOST_ASIO_BASIC_SOCKET_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -26,26 +26,28 @@
 #include <boost/asio/socket_base.hpp>
 
 #if defined(BOOST_ASIO_HAS_MOVE)
-# include <utility>
+#include <utility>
 #endif // defined(BOOST_ASIO_HAS_MOVE)
 
 #if !defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-# if defined(BOOST_ASIO_WINDOWS_RUNTIME)
-#  include <boost/asio/detail/winrt_ssocket_service.hpp>
-#  define BOOST_ASIO_SVC_T detail::winrt_ssocket_service<Protocol>
-# elif defined(BOOST_ASIO_HAS_IOCP)
-#  include <boost/asio/detail/win_iocp_socket_service.hpp>
-#  define BOOST_ASIO_SVC_T detail::win_iocp_socket_service<Protocol>
-# else
-#  include <boost/asio/detail/reactive_socket_service.hpp>
-#  define BOOST_ASIO_SVC_T detail::reactive_socket_service<Protocol>
-# endif
+#if defined(BOOST_ASIO_WINDOWS_RUNTIME)
+#include <boost/asio/detail/winrt_ssocket_service.hpp>
+#define BOOST_ASIO_SVC_T detail::winrt_ssocket_service<Protocol>
+#elif defined(BOOST_ASIO_HAS_IOCP)
+#include <boost/asio/detail/win_iocp_socket_service.hpp>
+#define BOOST_ASIO_SVC_T detail::win_iocp_socket_service<Protocol>
+#else
+#include <boost/asio/detail/reactive_socket_service.hpp>
+#define BOOST_ASIO_SVC_T detail::reactive_socket_service<Protocol>
+#endif
 #endif // !defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Provides socket functionality.
 /**
@@ -57,46 +59,46 @@ namespace asio {
  * @e Shared @e objects: Unsafe.
  */
 template <typename Protocol BOOST_ASIO_SVC_TPARAM>
-class basic_socket
-  : BOOST_ASIO_SVC_ACCESS basic_io_object<BOOST_ASIO_SVC_T>,
-    public socket_base
+class basic_socket : BOOST_ASIO_SVC_ACCESS basic_io_object<BOOST_ASIO_SVC_T>,
+		     public socket_base
 {
 public:
-  /// The type of the executor associated with the object.
-  typedef io_context::executor_type executor_type;
+	/// The type of the executor associated with the object.
+	typedef io_context::executor_type executor_type;
 
-  /// The native representation of a socket.
+	/// The native representation of a socket.
 #if defined(GENERATING_DOCUMENTATION)
-  typedef implementation_defined native_handle_type;
+	typedef implementation_defined native_handle_type;
 #else
-  typedef typename BOOST_ASIO_SVC_T::native_handle_type native_handle_type;
+	typedef
+	    typename BOOST_ASIO_SVC_T::native_handle_type native_handle_type;
 #endif
 
-  /// The protocol type.
-  typedef Protocol protocol_type;
+	/// The protocol type.
+	typedef Protocol protocol_type;
 
-  /// The endpoint type.
-  typedef typename Protocol::endpoint endpoint_type;
+	/// The endpoint type.
+	typedef typename Protocol::endpoint endpoint_type;
 
 #if !defined(BOOST_ASIO_NO_EXTENSIONS)
-  /// A basic_socket is always the lowest layer.
-  typedef basic_socket<Protocol BOOST_ASIO_SVC_TARG> lowest_layer_type;
+	/// A basic_socket is always the lowest layer.
+	typedef basic_socket<Protocol BOOST_ASIO_SVC_TARG> lowest_layer_type;
 #endif // !defined(BOOST_ASIO_NO_EXTENSIONS)
 
-  /// Construct a basic_socket without opening it.
-  /**
+	/// Construct a basic_socket without opening it.
+	/**
    * This constructor creates a socket without opening it.
    *
    * @param io_context The io_context object that the socket will use to
    * dispatch handlers for any asynchronous operations performed on the socket.
    */
-  explicit basic_socket(boost::asio::io_context& io_context)
-    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
-  {
-  }
+	explicit basic_socket(boost::asio::io_context &io_context)
+	    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
+	{
+	}
 
-  /// Construct and open a basic_socket.
-  /**
+	/// Construct and open a basic_socket.
+	/**
    * This constructor creates and opens a socket.
    *
    * @param io_context The io_context object that the socket will use to
@@ -106,18 +108,19 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_socket(boost::asio::io_context& io_context,
-      const protocol_type& protocol)
-    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
-  {
-    boost::system::error_code ec;
-    this->get_service().open(this->get_implementation(), protocol, ec);
-    boost::asio::detail::throw_error(ec, "open");
-  }
+	basic_socket(boost::asio::io_context &io_context,
+		     const protocol_type &protocol)
+	    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
+	{
+		boost::system::error_code ec;
+		this->get_service().open(this->get_implementation(), protocol,
+					 ec);
+		boost::asio::detail::throw_error(ec, "open");
+	}
 
-  /// Construct a basic_socket, opening it and binding it to the given local
-  /// endpoint.
-  /**
+	/// Construct a basic_socket, opening it and binding it to the given local
+	/// endpoint.
+	/**
    * This constructor creates a socket and automatically opens it bound to the
    * specified endpoint on the local machine. The protocol used is the protocol
    * associated with the given endpoint.
@@ -130,20 +133,22 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_socket(boost::asio::io_context& io_context,
-      const endpoint_type& endpoint)
-    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
-  {
-    boost::system::error_code ec;
-    const protocol_type protocol = endpoint.protocol();
-    this->get_service().open(this->get_implementation(), protocol, ec);
-    boost::asio::detail::throw_error(ec, "open");
-    this->get_service().bind(this->get_implementation(), endpoint, ec);
-    boost::asio::detail::throw_error(ec, "bind");
-  }
+	basic_socket(boost::asio::io_context &io_context,
+		     const endpoint_type &endpoint)
+	    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
+	{
+		boost::system::error_code ec;
+		const protocol_type protocol = endpoint.protocol();
+		this->get_service().open(this->get_implementation(), protocol,
+					 ec);
+		boost::asio::detail::throw_error(ec, "open");
+		this->get_service().bind(this->get_implementation(), endpoint,
+					 ec);
+		boost::asio::detail::throw_error(ec, "bind");
+	}
 
-  /// Construct a basic_socket on an existing native socket.
-  /**
+	/// Construct a basic_socket on an existing native socket.
+	/**
    * This constructor creates a socket object to hold an existing native socket.
    *
    * @param io_context The io_context object that the socket will use to
@@ -155,19 +160,20 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_socket(boost::asio::io_context& io_context,
-      const protocol_type& protocol, const native_handle_type& native_socket)
-    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
-  {
-    boost::system::error_code ec;
-    this->get_service().assign(this->get_implementation(),
-        protocol, native_socket, ec);
-    boost::asio::detail::throw_error(ec, "assign");
-  }
+	basic_socket(boost::asio::io_context &io_context,
+		     const protocol_type &protocol,
+		     const native_handle_type &native_socket)
+	    : basic_io_object<BOOST_ASIO_SVC_T>(io_context)
+	{
+		boost::system::error_code ec;
+		this->get_service().assign(this->get_implementation(), protocol,
+					   native_socket, ec);
+		boost::asio::detail::throw_error(ec, "assign");
+	}
 
 #if defined(BOOST_ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
-  /// Move-construct a basic_socket from another.
-  /**
+	/// Move-construct a basic_socket from another.
+	/**
    * This constructor moves a socket from one object to another.
    *
    * @param other The other basic_socket object from which the move will
@@ -176,13 +182,13 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_socket(io_context&) constructor.
    */
-  basic_socket(basic_socket&& other)
-    : basic_io_object<BOOST_ASIO_SVC_T>(std::move(other))
-  {
-  }
+	basic_socket(basic_socket &&other)
+	    : basic_io_object<BOOST_ASIO_SVC_T>(std::move(other))
+	{
+	}
 
-  /// Move-assign a basic_socket from another.
-  /**
+	/// Move-assign a basic_socket from another.
+	/**
    * This assignment operator moves a socket from one object to another.
    *
    * @param other The other basic_socket object from which the move will
@@ -191,18 +197,18 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_socket(io_context&) constructor.
    */
-  basic_socket& operator=(basic_socket&& other)
-  {
-    basic_io_object<BOOST_ASIO_SVC_T>::operator=(std::move(other));
-    return *this;
-  }
+	basic_socket &operator=(basic_socket &&other)
+	{
+		basic_io_object<BOOST_ASIO_SVC_T>::operator=(std::move(other));
+		return *this;
+	}
 
-  // All sockets have access to each other's implementations.
-  template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
-  friend class basic_socket;
+	// All sockets have access to each other's implementations.
+	template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
+	friend class basic_socket;
 
-  /// Move-construct a basic_socket from a socket of another protocol type.
-  /**
+	/// Move-construct a basic_socket from a socket of another protocol type.
+	/**
    * This constructor moves a socket from one object to another.
    *
    * @param other The other basic_socket object from which the move will
@@ -211,16 +217,18 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_socket(io_context&) constructor.
    */
-  template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
-  basic_socket(basic_socket<Protocol1 BOOST_ASIO_SVC_TARG1>&& other,
-      typename enable_if<is_convertible<Protocol1, Protocol>::value>::type* = 0)
-    : basic_io_object<BOOST_ASIO_SVC_T>(
-        other.get_service(), other.get_implementation())
-  {
-  }
+	template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
+	basic_socket(
+	    basic_socket<Protocol1 BOOST_ASIO_SVC_TARG1> &&other,
+	    typename enable_if<is_convertible<Protocol1, Protocol>::value>::type
+		* = 0)
+	    : basic_io_object<BOOST_ASIO_SVC_T>(other.get_service(),
+						other.get_implementation())
+	{
+	}
 
-  /// Move-assign a basic_socket from a socket of another protocol type.
-  /**
+	/// Move-assign a basic_socket from a socket of another protocol type.
+	/**
    * This assignment operator moves a socket from one object to another.
    *
    * @param other The other basic_socket object from which the move will
@@ -229,60 +237,60 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_socket(io_context&) constructor.
    */
-  template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
-  typename enable_if<is_convertible<Protocol1, Protocol>::value,
-      basic_socket>::type& operator=(
-        basic_socket<Protocol1 BOOST_ASIO_SVC_TARG1>&& other)
-  {
-    basic_socket tmp(std::move(other));
-    basic_io_object<BOOST_ASIO_SVC_T>::operator=(std::move(tmp));
-    return *this;
-  }
+	template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
+	typename enable_if<is_convertible<Protocol1, Protocol>::value,
+			   basic_socket>::type &
+	operator=(basic_socket<Protocol1 BOOST_ASIO_SVC_TARG1> &&other)
+	{
+		basic_socket tmp(std::move(other));
+		basic_io_object<BOOST_ASIO_SVC_T>::operator=(std::move(tmp));
+		return *this;
+	}
 #endif // defined(BOOST_ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  // These functions are provided by basic_io_object<>.
+	// These functions are provided by basic_io_object<>.
 #else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 #if !defined(BOOST_ASIO_NO_DEPRECATED)
-  /// (Deprecated: Use get_executor().) Get the io_context associated with the
-  /// object.
-  /**
+	/// (Deprecated: Use get_executor().) Get the io_context associated with the
+	/// object.
+	/**
    * This function may be used to obtain the io_context object that the I/O
    * object uses to dispatch handlers for asynchronous operations.
    *
    * @return A reference to the io_context object that the I/O object will use
    * to dispatch handlers. Ownership is not transferred to the caller.
    */
-  boost::asio::io_context& get_io_context()
-  {
-    return basic_io_object<BOOST_ASIO_SVC_T>::get_io_context();
-  }
+	boost::asio::io_context &get_io_context()
+	{
+		return basic_io_object<BOOST_ASIO_SVC_T>::get_io_context();
+	}
 
-  /// (Deprecated: Use get_executor().) Get the io_context associated with the
-  /// object.
-  /**
+	/// (Deprecated: Use get_executor().) Get the io_context associated with the
+	/// object.
+	/**
    * This function may be used to obtain the io_context object that the I/O
    * object uses to dispatch handlers for asynchronous operations.
    *
    * @return A reference to the io_context object that the I/O object will use
    * to dispatch handlers. Ownership is not transferred to the caller.
    */
-  boost::asio::io_context& get_io_service()
-  {
-    return basic_io_object<BOOST_ASIO_SVC_T>::get_io_service();
-  }
+	boost::asio::io_context &get_io_service()
+	{
+		return basic_io_object<BOOST_ASIO_SVC_T>::get_io_service();
+	}
 #endif // !defined(BOOST_ASIO_NO_DEPRECATED)
 
-  /// Get the executor associated with the object.
-  executor_type get_executor() BOOST_ASIO_NOEXCEPT
-  {
-    return basic_io_object<BOOST_ASIO_SVC_T>::get_executor();
-  }
+	/// Get the executor associated with the object.
+	executor_type get_executor() BOOST_ASIO_NOEXCEPT
+	{
+		return basic_io_object<BOOST_ASIO_SVC_T>::get_executor();
+	}
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 
 #if !defined(BOOST_ASIO_NO_EXTENSIONS)
-  /// Get a reference to the lowest layer.
-  /**
+	/// Get a reference to the lowest layer.
+	/**
    * This function returns a reference to the lowest layer in a stack of
    * layers. Since a basic_socket cannot contain any further layers, it simply
    * returns a reference to itself.
@@ -290,13 +298,10 @@ public:
    * @return A reference to the lowest layer in the stack of layers. Ownership
    * is not transferred to the caller.
    */
-  lowest_layer_type& lowest_layer()
-  {
-    return *this;
-  }
+	lowest_layer_type &lowest_layer() { return *this; }
 
-  /// Get a const reference to the lowest layer.
-  /**
+	/// Get a const reference to the lowest layer.
+	/**
    * This function returns a const reference to the lowest layer in a stack of
    * layers. Since a basic_socket cannot contain any further layers, it simply
    * returns a reference to itself.
@@ -304,14 +309,11 @@ public:
    * @return A const reference to the lowest layer in the stack of layers.
    * Ownership is not transferred to the caller.
    */
-  const lowest_layer_type& lowest_layer() const
-  {
-    return *this;
-  }
+	const lowest_layer_type &lowest_layer() const { return *this; }
 #endif // !defined(BOOST_ASIO_NO_EXTENSIONS)
 
-  /// Open the socket using the specified protocol.
-  /**
+	/// Open the socket using the specified protocol.
+	/**
    * This function opens the socket so that it will use the specified protocol.
    *
    * @param protocol An object specifying protocol parameters to be used.
@@ -324,15 +326,16 @@ public:
    * socket.open(boost::asio::ip::tcp::v4());
    * @endcode
    */
-  void open(const protocol_type& protocol = protocol_type())
-  {
-    boost::system::error_code ec;
-    this->get_service().open(this->get_implementation(), protocol, ec);
-    boost::asio::detail::throw_error(ec, "open");
-  }
+	void open(const protocol_type &protocol = protocol_type())
+	{
+		boost::system::error_code ec;
+		this->get_service().open(this->get_implementation(), protocol,
+					 ec);
+		boost::asio::detail::throw_error(ec, "open");
+	}
 
-  /// Open the socket using the specified protocol.
-  /**
+	/// Open the socket using the specified protocol.
+	/**
    * This function opens the socket so that it will use the specified protocol.
    *
    * @param protocol An object specifying which protocol is to be used.
@@ -350,15 +353,16 @@ public:
    * }
    * @endcode
    */
-  BOOST_ASIO_SYNC_OP_VOID open(const protocol_type& protocol,
-      boost::system::error_code& ec)
-  {
-    this->get_service().open(this->get_implementation(), protocol, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID open(const protocol_type &protocol,
+				     boost::system::error_code &ec)
+	{
+		this->get_service().open(this->get_implementation(), protocol,
+					 ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Assign an existing native socket to the socket.
-  /*
+	/// Assign an existing native socket to the socket.
+	/*
    * This function opens the socket to hold an existing native socket.
    *
    * @param protocol An object specifying which protocol is to be used.
@@ -367,17 +371,17 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  void assign(const protocol_type& protocol,
-      const native_handle_type& native_socket)
-  {
-    boost::system::error_code ec;
-    this->get_service().assign(this->get_implementation(),
-        protocol, native_socket, ec);
-    boost::asio::detail::throw_error(ec, "assign");
-  }
+	void assign(const protocol_type &protocol,
+		    const native_handle_type &native_socket)
+	{
+		boost::system::error_code ec;
+		this->get_service().assign(this->get_implementation(), protocol,
+					   native_socket, ec);
+		boost::asio::detail::throw_error(ec, "assign");
+	}
 
-  /// Assign an existing native socket to the socket.
-  /*
+	/// Assign an existing native socket to the socket.
+	/*
    * This function opens the socket to hold an existing native socket.
    *
    * @param protocol An object specifying which protocol is to be used.
@@ -386,22 +390,23 @@ public:
    *
    * @param ec Set to indicate what error occurred, if any.
    */
-  BOOST_ASIO_SYNC_OP_VOID assign(const protocol_type& protocol,
-      const native_handle_type& native_socket, boost::system::error_code& ec)
-  {
-    this->get_service().assign(this->get_implementation(),
-        protocol, native_socket, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID assign(const protocol_type &protocol,
+				       const native_handle_type &native_socket,
+				       boost::system::error_code &ec)
+	{
+		this->get_service().assign(this->get_implementation(), protocol,
+					   native_socket, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Determine whether the socket is open.
-  bool is_open() const
-  {
-    return this->get_service().is_open(this->get_implementation());
-  }
+	/// Determine whether the socket is open.
+	bool is_open() const
+	{
+		return this->get_service().is_open(this->get_implementation());
+	}
 
-  /// Close the socket.
-  /**
+	/// Close the socket.
+	/**
    * This function is used to close the socket. Any asynchronous send, receive
    * or connect operations will be cancelled immediately, and will complete
    * with the boost::asio::error::operation_aborted error.
@@ -412,15 +417,15 @@ public:
    * @note For portable behaviour with respect to graceful closure of a
    * connected socket, call shutdown() before closing the socket.
    */
-  void close()
-  {
-    boost::system::error_code ec;
-    this->get_service().close(this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "close");
-  }
+	void close()
+	{
+		boost::system::error_code ec;
+		this->get_service().close(this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "close");
+	}
 
-  /// Close the socket.
-  /**
+	/// Close the socket.
+	/**
    * This function is used to close the socket. Any asynchronous send, receive
    * or connect operations will be cancelled immediately, and will complete
    * with the boost::asio::error::operation_aborted error.
@@ -443,14 +448,14 @@ public:
    * @note For portable behaviour with respect to graceful closure of a
    * connected socket, call shutdown() before closing the socket.
    */
-  BOOST_ASIO_SYNC_OP_VOID close(boost::system::error_code& ec)
-  {
-    this->get_service().close(this->get_implementation(), ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID close(boost::system::error_code &ec)
+	{
+		this->get_service().close(this->get_implementation(), ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Release ownership of the underlying native socket.
-  /**
+	/// Release ownership of the underlying native socket.
+	/**
    * This function causes all outstanding asynchronous connect, send and receive
    * operations to finish immediately, and the handlers for cancelled operations
    * will be passed the boost::asio::error::operation_aborted error. Ownership
@@ -462,23 +467,24 @@ public:
    * 8.1, and will fail with boost::asio::error::operation_not_supported on
    * these platforms.
    */
-#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
-  __declspec(deprecated("This function always fails with "
-        "operation_not_supported when used on Windows versions "
-        "prior to Windows 8.1."))
+#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) &&                   \
+    (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
+	__declspec(
+	    deprecated("This function always fails with "
+		       "operation_not_supported when used on Windows versions "
+		       "prior to Windows 8.1."))
 #endif
-  native_handle_type release()
-  {
-    boost::system::error_code ec;
-    native_handle_type s = this->get_service().release(
-        this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "release");
-    return s;
-  }
+	    native_handle_type release()
+	{
+		boost::system::error_code ec;
+		native_handle_type s =
+		    this->get_service().release(this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "release");
+		return s;
+	}
 
-  /// Release ownership of the underlying native socket.
-  /**
+	/// Release ownership of the underlying native socket.
+	/**
    * This function causes all outstanding asynchronous connect, send and receive
    * operations to finish immediately, and the handlers for cancelled operations
    * will be passed the boost::asio::error::operation_aborted error. Ownership
@@ -490,30 +496,33 @@ public:
    * 8.1, and will fail with boost::asio::error::operation_not_supported on
    * these platforms.
    */
-#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
-  __declspec(deprecated("This function always fails with "
-        "operation_not_supported when used on Windows versions "
-        "prior to Windows 8.1."))
+#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) &&                   \
+    (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0603)
+	__declspec(
+	    deprecated("This function always fails with "
+		       "operation_not_supported when used on Windows versions "
+		       "prior to Windows 8.1."))
 #endif
-  native_handle_type release(boost::system::error_code& ec)
-  {
-    return this->get_service().release(this->get_implementation(), ec);
-  }
+	    native_handle_type release(boost::system::error_code &ec)
+	{
+		return this->get_service().release(this->get_implementation(),
+						   ec);
+	}
 
-  /// Get the native socket representation.
-  /**
+	/// Get the native socket representation.
+	/**
    * This function may be used to obtain the underlying representation of the
    * socket. This is intended to allow access to native socket functionality
    * that is not otherwise provided.
    */
-  native_handle_type native_handle()
-  {
-    return this->get_service().native_handle(this->get_implementation());
-  }
+	native_handle_type native_handle()
+	{
+		return this->get_service().native_handle(
+		    this->get_implementation());
+	}
 
-  /// Cancel all asynchronous operations associated with the socket.
-  /**
+	/// Cancel all asynchronous operations associated with the socket.
+	/**
    * This function causes all outstanding asynchronous connect, send and receive
    * operations to finish immediately, and the handlers for cancelled operations
    * will be passed the boost::asio::error::operation_aborted error.
@@ -546,22 +555,23 @@ public:
    * CancelIoEx function is always used. This function does not have the
    * problems described above.
    */
-#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600) \
-  && !defined(BOOST_ASIO_ENABLE_CANCELIO)
-  __declspec(deprecated("By default, this function always fails with "
-        "operation_not_supported when used on Windows XP, Windows Server 2003, "
-        "or earlier. Consult documentation for details."))
+#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) &&                   \
+    (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600) &&                       \
+    !defined(BOOST_ASIO_ENABLE_CANCELIO)
+	__declspec(deprecated("By default, this function always fails with "
+			      "operation_not_supported when used on Windows "
+			      "XP, Windows Server 2003, "
+			      "or earlier. Consult documentation for details."))
 #endif
-  void cancel()
-  {
-    boost::system::error_code ec;
-    this->get_service().cancel(this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "cancel");
-  }
+	    void cancel()
+	{
+		boost::system::error_code ec;
+		this->get_service().cancel(this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "cancel");
+	}
 
-  /// Cancel all asynchronous operations associated with the socket.
-  /**
+	/// Cancel all asynchronous operations associated with the socket.
+	/**
    * This function causes all outstanding asynchronous connect, send and receive
    * operations to finish immediately, and the handlers for cancelled operations
    * will be passed the boost::asio::error::operation_aborted error.
@@ -594,21 +604,22 @@ public:
    * CancelIoEx function is always used. This function does not have the
    * problems described above.
    */
-#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) \
-  && (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600) \
-  && !defined(BOOST_ASIO_ENABLE_CANCELIO)
-  __declspec(deprecated("By default, this function always fails with "
-        "operation_not_supported when used on Windows XP, Windows Server 2003, "
-        "or earlier. Consult documentation for details."))
+#if defined(BOOST_ASIO_MSVC) && (BOOST_ASIO_MSVC >= 1400) &&                   \
+    (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600) &&                       \
+    !defined(BOOST_ASIO_ENABLE_CANCELIO)
+	__declspec(deprecated("By default, this function always fails with "
+			      "operation_not_supported when used on Windows "
+			      "XP, Windows Server 2003, "
+			      "or earlier. Consult documentation for details."))
 #endif
-  BOOST_ASIO_SYNC_OP_VOID cancel(boost::system::error_code& ec)
-  {
-    this->get_service().cancel(this->get_implementation(), ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	    BOOST_ASIO_SYNC_OP_VOID cancel(boost::system::error_code &ec)
+	{
+		this->get_service().cancel(this->get_implementation(), ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Determine whether the socket is at the out-of-band data mark.
-  /**
+	/// Determine whether the socket is at the out-of-band data mark.
+	/**
    * This function is used to check whether the socket input is currently
    * positioned at the out-of-band data mark.
    *
@@ -617,16 +628,17 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  bool at_mark() const
-  {
-    boost::system::error_code ec;
-    bool b = this->get_service().at_mark(this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "at_mark");
-    return b;
-  }
+	bool at_mark() const
+	{
+		boost::system::error_code ec;
+		bool b =
+		    this->get_service().at_mark(this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "at_mark");
+		return b;
+	}
 
-  /// Determine whether the socket is at the out-of-band data mark.
-  /**
+	/// Determine whether the socket is at the out-of-band data mark.
+	/**
    * This function is used to check whether the socket input is currently
    * positioned at the out-of-band data mark.
    *
@@ -635,13 +647,14 @@ public:
    * @return A bool indicating whether the socket is at the out-of-band data
    * mark.
    */
-  bool at_mark(boost::system::error_code& ec) const
-  {
-    return this->get_service().at_mark(this->get_implementation(), ec);
-  }
+	bool at_mark(boost::system::error_code &ec) const
+	{
+		return this->get_service().at_mark(this->get_implementation(),
+						   ec);
+	}
 
-  /// Determine the number of bytes available for reading.
-  /**
+	/// Determine the number of bytes available for reading.
+	/**
    * This function is used to determine the number of bytes that may be read
    * without blocking.
    *
@@ -650,17 +663,17 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  std::size_t available() const
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->get_service().available(
-        this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "available");
-    return s;
-  }
+	std::size_t available() const
+	{
+		boost::system::error_code ec;
+		std::size_t s = this->get_service().available(
+		    this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "available");
+		return s;
+	}
 
-  /// Determine the number of bytes available for reading.
-  /**
+	/// Determine the number of bytes available for reading.
+	/**
    * This function is used to determine the number of bytes that may be read
    * without blocking.
    *
@@ -669,13 +682,14 @@ public:
    * @return The number of bytes that may be read without blocking, or 0 if an
    * error occurs.
    */
-  std::size_t available(boost::system::error_code& ec) const
-  {
-    return this->get_service().available(this->get_implementation(), ec);
-  }
+	std::size_t available(boost::system::error_code &ec) const
+	{
+		return this->get_service().available(this->get_implementation(),
+						     ec);
+	}
 
-  /// Bind the socket to the given local endpoint.
-  /**
+	/// Bind the socket to the given local endpoint.
+	/**
    * This function binds the socket to the specified endpoint on the local
    * machine.
    *
@@ -692,15 +706,16 @@ public:
    *       boost::asio::ip::tcp::v4(), 12345));
    * @endcode
    */
-  void bind(const endpoint_type& endpoint)
-  {
-    boost::system::error_code ec;
-    this->get_service().bind(this->get_implementation(), endpoint, ec);
-    boost::asio::detail::throw_error(ec, "bind");
-  }
+	void bind(const endpoint_type &endpoint)
+	{
+		boost::system::error_code ec;
+		this->get_service().bind(this->get_implementation(), endpoint,
+					 ec);
+		boost::asio::detail::throw_error(ec, "bind");
+	}
 
-  /// Bind the socket to the given local endpoint.
-  /**
+	/// Bind the socket to the given local endpoint.
+	/**
    * This function binds the socket to the specified endpoint on the local
    * machine.
    *
@@ -722,15 +737,16 @@ public:
    * }
    * @endcode
    */
-  BOOST_ASIO_SYNC_OP_VOID bind(const endpoint_type& endpoint,
-      boost::system::error_code& ec)
-  {
-    this->get_service().bind(this->get_implementation(), endpoint, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID bind(const endpoint_type &endpoint,
+				     boost::system::error_code &ec)
+	{
+		this->get_service().bind(this->get_implementation(), endpoint,
+					 ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Connect the socket to the specified endpoint.
-  /**
+	/// Connect the socket to the specified endpoint.
+	/**
    * This function is used to connect a socket to the specified remote endpoint.
    * The function call will block until the connection is successfully made or
    * an error occurs.
@@ -752,21 +768,21 @@ public:
    * socket.connect(endpoint);
    * @endcode
    */
-  void connect(const endpoint_type& peer_endpoint)
-  {
-    boost::system::error_code ec;
-    if (!is_open())
-    {
-      this->get_service().open(this->get_implementation(),
-          peer_endpoint.protocol(), ec);
-      boost::asio::detail::throw_error(ec, "connect");
-    }
-    this->get_service().connect(this->get_implementation(), peer_endpoint, ec);
-    boost::asio::detail::throw_error(ec, "connect");
-  }
+	void connect(const endpoint_type &peer_endpoint)
+	{
+		boost::system::error_code ec;
+		if (!is_open()) {
+			this->get_service().open(this->get_implementation(),
+						 peer_endpoint.protocol(), ec);
+			boost::asio::detail::throw_error(ec, "connect");
+		}
+		this->get_service().connect(this->get_implementation(),
+					    peer_endpoint, ec);
+		boost::asio::detail::throw_error(ec, "connect");
+	}
 
-  /// Connect the socket to the specified endpoint.
-  /**
+	/// Connect the socket to the specified endpoint.
+	/**
    * This function is used to connect a socket to the specified remote endpoint.
    * The function call will block until the connection is successfully made or
    * an error occurs.
@@ -793,25 +809,24 @@ public:
    * }
    * @endcode
    */
-  BOOST_ASIO_SYNC_OP_VOID connect(const endpoint_type& peer_endpoint,
-      boost::system::error_code& ec)
-  {
-    if (!is_open())
-    {
-      this->get_service().open(this->get_implementation(),
-            peer_endpoint.protocol(), ec);
-      if (ec)
-      {
-        BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-      }
-    }
+	BOOST_ASIO_SYNC_OP_VOID connect(const endpoint_type &peer_endpoint,
+					boost::system::error_code &ec)
+	{
+		if (!is_open()) {
+			this->get_service().open(this->get_implementation(),
+						 peer_endpoint.protocol(), ec);
+			if (ec) {
+				BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+			}
+		}
 
-    this->get_service().connect(this->get_implementation(), peer_endpoint, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+		this->get_service().connect(this->get_implementation(),
+					    peer_endpoint, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Start an asynchronous connect.
-  /**
+	/// Start an asynchronous connect.
+	/**
    * This function is used to asynchronously connect a socket to the specified
    * remote endpoint. The function call always returns immediately.
    *
@@ -851,52 +866,62 @@ public:
    * socket.async_connect(endpoint, connect_handler);
    * @endcode
    */
-  template <typename ConnectHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(ConnectHandler,
-      void (boost::system::error_code))
-  async_connect(const endpoint_type& peer_endpoint,
-      BOOST_ASIO_MOVE_ARG(ConnectHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a ConnectHandler.
-    BOOST_ASIO_CONNECT_HANDLER_CHECK(ConnectHandler, handler) type_check;
+	template <typename ConnectHandler>
+	BOOST_ASIO_INITFN_RESULT_TYPE(ConnectHandler,
+				      void(boost::system::error_code))
+	async_connect(const endpoint_type &peer_endpoint,
+		      BOOST_ASIO_MOVE_ARG(ConnectHandler) handler)
+	{
+		// If you get an error on the following line it means that your handler does
+		// not meet the documented type requirements for a ConnectHandler.
+		BOOST_ASIO_CONNECT_HANDLER_CHECK(ConnectHandler, handler)
+		type_check;
 
-    if (!is_open())
-    {
-      boost::system::error_code ec;
-      const protocol_type protocol = peer_endpoint.protocol();
-      this->get_service().open(this->get_implementation(), protocol, ec);
-      if (ec)
-      {
-        async_completion<ConnectHandler,
-          void (boost::system::error_code)> init(handler);
+		if (!is_open()) {
+			boost::system::error_code ec;
+			const protocol_type protocol = peer_endpoint.protocol();
+			this->get_service().open(this->get_implementation(),
+						 protocol, ec);
+			if (ec) {
+				async_completion<ConnectHandler,
+						 void(
+						     boost::system::error_code)>
+				    init(handler);
 
-        boost::asio::post(this->get_executor(),
-            boost::asio::detail::bind_handler(
-              BOOST_ASIO_MOVE_CAST(BOOST_ASIO_HANDLER_TYPE(
-                ConnectHandler, void (boost::system::error_code)))(
-                  init.completion_handler), ec));
+				boost::asio::post(
+				    this->get_executor(),
+				    boost::asio::detail::bind_handler(
+					BOOST_ASIO_MOVE_CAST(
+					    BOOST_ASIO_HANDLER_TYPE(
+						ConnectHandler,
+						void(boost::system::
+							 error_code)))(
+					    init.completion_handler),
+					ec));
 
-        return init.result.get();
-      }
-    }
+				return init.result.get();
+			}
+		}
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().async_connect(this->get_implementation(),
-        peer_endpoint, BOOST_ASIO_MOVE_CAST(ConnectHandler)(handler));
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    async_completion<ConnectHandler,
-      void (boost::system::error_code)> init(handler);
+		return this->get_service().async_connect(
+		    this->get_implementation(), peer_endpoint,
+		    BOOST_ASIO_MOVE_CAST(ConnectHandler)(handler));
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		async_completion<ConnectHandler,
+				 void(boost::system::error_code)>
+		    init(handler);
 
-    this->get_service().async_connect(
-        this->get_implementation(), peer_endpoint, init.completion_handler);
+		this->get_service().async_connect(this->get_implementation(),
+						  peer_endpoint,
+						  init.completion_handler);
 
-    return init.result.get();
+		return init.result.get();
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  }
+	}
 
-  /// Set an option on the socket.
-  /**
+	/// Set an option on the socket.
+	/**
    * This function is used to set an option on the socket.
    *
    * @param option The new option value to be set on the socket.
@@ -929,16 +954,17 @@ public:
    * socket.set_option(option);
    * @endcode
    */
-  template <typename SettableSocketOption>
-  void set_option(const SettableSocketOption& option)
-  {
-    boost::system::error_code ec;
-    this->get_service().set_option(this->get_implementation(), option, ec);
-    boost::asio::detail::throw_error(ec, "set_option");
-  }
+	template <typename SettableSocketOption>
+	void set_option(const SettableSocketOption &option)
+	{
+		boost::system::error_code ec;
+		this->get_service().set_option(this->get_implementation(),
+					       option, ec);
+		boost::asio::detail::throw_error(ec, "set_option");
+	}
 
-  /// Set an option on the socket.
-  /**
+	/// Set an option on the socket.
+	/**
    * This function is used to set an option on the socket.
    *
    * @param option The new option value to be set on the socket.
@@ -976,16 +1002,17 @@ public:
    * }
    * @endcode
    */
-  template <typename SettableSocketOption>
-  BOOST_ASIO_SYNC_OP_VOID set_option(const SettableSocketOption& option,
-      boost::system::error_code& ec)
-  {
-    this->get_service().set_option(this->get_implementation(), option, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	template <typename SettableSocketOption>
+	BOOST_ASIO_SYNC_OP_VOID set_option(const SettableSocketOption &option,
+					   boost::system::error_code &ec)
+	{
+		this->get_service().set_option(this->get_implementation(),
+					       option, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Get an option from the socket.
-  /**
+	/// Get an option from the socket.
+	/**
    * This function is used to get the current value of an option on the socket.
    *
    * @param option The option value to be obtained from the socket.
@@ -1019,16 +1046,17 @@ public:
    * bool is_set = option.value();
    * @endcode
    */
-  template <typename GettableSocketOption>
-  void get_option(GettableSocketOption& option) const
-  {
-    boost::system::error_code ec;
-    this->get_service().get_option(this->get_implementation(), option, ec);
-    boost::asio::detail::throw_error(ec, "get_option");
-  }
+	template <typename GettableSocketOption>
+	void get_option(GettableSocketOption &option) const
+	{
+		boost::system::error_code ec;
+		this->get_service().get_option(this->get_implementation(),
+					       option, ec);
+		boost::asio::detail::throw_error(ec, "get_option");
+	}
 
-  /// Get an option from the socket.
-  /**
+	/// Get an option from the socket.
+	/**
    * This function is used to get the current value of an option on the socket.
    *
    * @param option The option value to be obtained from the socket.
@@ -1067,16 +1095,17 @@ public:
    * bool is_set = option.value();
    * @endcode
    */
-  template <typename GettableSocketOption>
-  BOOST_ASIO_SYNC_OP_VOID get_option(GettableSocketOption& option,
-      boost::system::error_code& ec) const
-  {
-    this->get_service().get_option(this->get_implementation(), option, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	template <typename GettableSocketOption>
+	BOOST_ASIO_SYNC_OP_VOID get_option(GettableSocketOption &option,
+					   boost::system::error_code &ec) const
+	{
+		this->get_service().get_option(this->get_implementation(),
+					       option, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Perform an IO control command on the socket.
-  /**
+	/// Perform an IO control command on the socket.
+	/**
    * This function is used to execute an IO control command on the socket.
    *
    * @param command The IO control command to be performed on the socket.
@@ -1097,16 +1126,17 @@ public:
    * std::size_t bytes_readable = command.get();
    * @endcode
    */
-  template <typename IoControlCommand>
-  void io_control(IoControlCommand& command)
-  {
-    boost::system::error_code ec;
-    this->get_service().io_control(this->get_implementation(), command, ec);
-    boost::asio::detail::throw_error(ec, "io_control");
-  }
+	template <typename IoControlCommand>
+	void io_control(IoControlCommand &command)
+	{
+		boost::system::error_code ec;
+		this->get_service().io_control(this->get_implementation(),
+					       command, ec);
+		boost::asio::detail::throw_error(ec, "io_control");
+	}
 
-  /// Perform an IO control command on the socket.
-  /**
+	/// Perform an IO control command on the socket.
+	/**
    * This function is used to execute an IO control command on the socket.
    *
    * @param command The IO control command to be performed on the socket.
@@ -1132,16 +1162,17 @@ public:
    * std::size_t bytes_readable = command.get();
    * @endcode
    */
-  template <typename IoControlCommand>
-  BOOST_ASIO_SYNC_OP_VOID io_control(IoControlCommand& command,
-      boost::system::error_code& ec)
-  {
-    this->get_service().io_control(this->get_implementation(), command, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	template <typename IoControlCommand>
+	BOOST_ASIO_SYNC_OP_VOID io_control(IoControlCommand &command,
+					   boost::system::error_code &ec)
+	{
+		this->get_service().io_control(this->get_implementation(),
+					       command, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Gets the non-blocking mode of the socket.
-  /**
+	/// Gets the non-blocking mode of the socket.
+	/**
    * @returns @c true if the socket's synchronous operations will fail with
    * boost::asio::error::would_block if they are unable to perform the requested
    * operation immediately. If @c false, synchronous operations will block
@@ -1151,13 +1182,14 @@ public:
    * operations. Asynchronous operations will never fail with the error
    * boost::asio::error::would_block.
    */
-  bool non_blocking() const
-  {
-    return this->get_service().non_blocking(this->get_implementation());
-  }
+	bool non_blocking() const
+	{
+		return this->get_service().non_blocking(
+		    this->get_implementation());
+	}
 
-  /// Sets the non-blocking mode of the socket.
-  /**
+	/// Sets the non-blocking mode of the socket.
+	/**
    * @param mode If @c true, the socket's synchronous operations will fail with
    * boost::asio::error::would_block if they are unable to perform the requested
    * operation immediately. If @c false, synchronous operations will block
@@ -1169,15 +1201,16 @@ public:
    * operations. Asynchronous operations will never fail with the error
    * boost::asio::error::would_block.
    */
-  void non_blocking(bool mode)
-  {
-    boost::system::error_code ec;
-    this->get_service().non_blocking(this->get_implementation(), mode, ec);
-    boost::asio::detail::throw_error(ec, "non_blocking");
-  }
+	void non_blocking(bool mode)
+	{
+		boost::system::error_code ec;
+		this->get_service().non_blocking(this->get_implementation(),
+						 mode, ec);
+		boost::asio::detail::throw_error(ec, "non_blocking");
+	}
 
-  /// Sets the non-blocking mode of the socket.
-  /**
+	/// Sets the non-blocking mode of the socket.
+	/**
    * @param mode If @c true, the socket's synchronous operations will fail with
    * boost::asio::error::would_block if they are unable to perform the requested
    * operation immediately. If @c false, synchronous operations will block
@@ -1189,15 +1222,16 @@ public:
    * operations. Asynchronous operations will never fail with the error
    * boost::asio::error::would_block.
    */
-  BOOST_ASIO_SYNC_OP_VOID non_blocking(
-      bool mode, boost::system::error_code& ec)
-  {
-    this->get_service().non_blocking(this->get_implementation(), mode, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID non_blocking(bool mode,
+					     boost::system::error_code &ec)
+	{
+		this->get_service().non_blocking(this->get_implementation(),
+						 mode, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Gets the non-blocking mode of the native socket implementation.
-  /**
+	/// Gets the non-blocking mode of the native socket implementation.
+	/**
    * This function is used to retrieve the non-blocking mode of the underlying
    * native socket. This mode has no effect on the behaviour of the socket
    * object's synchronous operations.
@@ -1280,13 +1314,14 @@ public:
    *   sock.async_wait(tcp::socket::wait_write, op);
    * } @endcode
    */
-  bool native_non_blocking() const
-  {
-    return this->get_service().native_non_blocking(this->get_implementation());
-  }
+	bool native_non_blocking() const
+	{
+		return this->get_service().native_non_blocking(
+		    this->get_implementation());
+	}
 
-  /// Sets the non-blocking mode of the native socket implementation.
-  /**
+	/// Sets the non-blocking mode of the native socket implementation.
+	/**
    * This function is used to modify the non-blocking mode of the underlying
    * native socket. It has no effect on the behaviour of the socket object's
    * synchronous operations.
@@ -1370,16 +1405,16 @@ public:
    *   sock.async_wait(tcp::socket::wait_write, op);
    * } @endcode
    */
-  void native_non_blocking(bool mode)
-  {
-    boost::system::error_code ec;
-    this->get_service().native_non_blocking(
-        this->get_implementation(), mode, ec);
-    boost::asio::detail::throw_error(ec, "native_non_blocking");
-  }
+	void native_non_blocking(bool mode)
+	{
+		boost::system::error_code ec;
+		this->get_service().native_non_blocking(
+		    this->get_implementation(), mode, ec);
+		boost::asio::detail::throw_error(ec, "native_non_blocking");
+	}
 
-  /// Sets the non-blocking mode of the native socket implementation.
-  /**
+	/// Sets the non-blocking mode of the native socket implementation.
+	/**
    * This function is used to modify the non-blocking mode of the underlying
    * native socket. It has no effect on the behaviour of the socket object's
    * synchronous operations.
@@ -1463,16 +1498,16 @@ public:
    *   sock.async_wait(tcp::socket::wait_write, op);
    * } @endcode
    */
-  BOOST_ASIO_SYNC_OP_VOID native_non_blocking(
-      bool mode, boost::system::error_code& ec)
-  {
-    this->get_service().native_non_blocking(
-        this->get_implementation(), mode, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID
+	native_non_blocking(bool mode, boost::system::error_code &ec)
+	{
+		this->get_service().native_non_blocking(
+		    this->get_implementation(), mode, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Get the local endpoint of the socket.
-  /**
+	/// Get the local endpoint of the socket.
+	/**
    * This function is used to obtain the locally bound endpoint of the socket.
    *
    * @returns An object that represents the local endpoint of the socket.
@@ -1486,17 +1521,17 @@ public:
    * boost::asio::ip::tcp::endpoint endpoint = socket.local_endpoint();
    * @endcode
    */
-  endpoint_type local_endpoint() const
-  {
-    boost::system::error_code ec;
-    endpoint_type ep = this->get_service().local_endpoint(
-        this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "local_endpoint");
-    return ep;
-  }
+	endpoint_type local_endpoint() const
+	{
+		boost::system::error_code ec;
+		endpoint_type ep = this->get_service().local_endpoint(
+		    this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "local_endpoint");
+		return ep;
+	}
 
-  /// Get the local endpoint of the socket.
-  /**
+	/// Get the local endpoint of the socket.
+	/**
    * This function is used to obtain the locally bound endpoint of the socket.
    *
    * @param ec Set to indicate what error occurred, if any.
@@ -1516,13 +1551,14 @@ public:
    * }
    * @endcode
    */
-  endpoint_type local_endpoint(boost::system::error_code& ec) const
-  {
-    return this->get_service().local_endpoint(this->get_implementation(), ec);
-  }
+	endpoint_type local_endpoint(boost::system::error_code &ec) const
+	{
+		return this->get_service().local_endpoint(
+		    this->get_implementation(), ec);
+	}
 
-  /// Get the remote endpoint of the socket.
-  /**
+	/// Get the remote endpoint of the socket.
+	/**
    * This function is used to obtain the remote endpoint of the socket.
    *
    * @returns An object that represents the remote endpoint of the socket.
@@ -1536,17 +1572,17 @@ public:
    * boost::asio::ip::tcp::endpoint endpoint = socket.remote_endpoint();
    * @endcode
    */
-  endpoint_type remote_endpoint() const
-  {
-    boost::system::error_code ec;
-    endpoint_type ep = this->get_service().remote_endpoint(
-        this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "remote_endpoint");
-    return ep;
-  }
+	endpoint_type remote_endpoint() const
+	{
+		boost::system::error_code ec;
+		endpoint_type ep = this->get_service().remote_endpoint(
+		    this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "remote_endpoint");
+		return ep;
+	}
 
-  /// Get the remote endpoint of the socket.
-  /**
+	/// Get the remote endpoint of the socket.
+	/**
    * This function is used to obtain the remote endpoint of the socket.
    *
    * @param ec Set to indicate what error occurred, if any.
@@ -1566,13 +1602,14 @@ public:
    * }
    * @endcode
    */
-  endpoint_type remote_endpoint(boost::system::error_code& ec) const
-  {
-    return this->get_service().remote_endpoint(this->get_implementation(), ec);
-  }
+	endpoint_type remote_endpoint(boost::system::error_code &ec) const
+	{
+		return this->get_service().remote_endpoint(
+		    this->get_implementation(), ec);
+	}
 
-  /// Disable sends or receives on the socket.
-  /**
+	/// Disable sends or receives on the socket.
+	/**
    * This function is used to disable send operations, receive operations, or
    * both.
    *
@@ -1588,15 +1625,16 @@ public:
    * socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
    * @endcode
    */
-  void shutdown(shutdown_type what)
-  {
-    boost::system::error_code ec;
-    this->get_service().shutdown(this->get_implementation(), what, ec);
-    boost::asio::detail::throw_error(ec, "shutdown");
-  }
+	void shutdown(shutdown_type what)
+	{
+		boost::system::error_code ec;
+		this->get_service().shutdown(this->get_implementation(), what,
+					     ec);
+		boost::asio::detail::throw_error(ec, "shutdown");
+	}
 
-  /// Disable sends or receives on the socket.
-  /**
+	/// Disable sends or receives on the socket.
+	/**
    * This function is used to disable send operations, receive operations, or
    * both.
    *
@@ -1617,16 +1655,17 @@ public:
    * }
    * @endcode
    */
-  BOOST_ASIO_SYNC_OP_VOID shutdown(shutdown_type what,
-      boost::system::error_code& ec)
-  {
-    this->get_service().shutdown(this->get_implementation(), what, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID shutdown(shutdown_type what,
+					 boost::system::error_code &ec)
+	{
+		this->get_service().shutdown(this->get_implementation(), what,
+					     ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Wait for the socket to become ready to read, ready to write, or to have
-  /// pending error conditions.
-  /**
+	/// Wait for the socket to become ready to read, ready to write, or to have
+	/// pending error conditions.
+	/**
    * This function is used to perform a blocking wait for a socket to enter
    * a ready to read, write or error condition state.
    *
@@ -1640,16 +1679,16 @@ public:
    * socket.wait(boost::asio::ip::tcp::socket::wait_read);
    * @endcode
    */
-  void wait(wait_type w)
-  {
-    boost::system::error_code ec;
-    this->get_service().wait(this->get_implementation(), w, ec);
-    boost::asio::detail::throw_error(ec, "wait");
-  }
+	void wait(wait_type w)
+	{
+		boost::system::error_code ec;
+		this->get_service().wait(this->get_implementation(), w, ec);
+		boost::asio::detail::throw_error(ec, "wait");
+	}
 
-  /// Wait for the socket to become ready to read, ready to write, or to have
-  /// pending error conditions.
-  /**
+	/// Wait for the socket to become ready to read, ready to write, or to have
+	/// pending error conditions.
+	/**
    * This function is used to perform a blocking wait for a socket to enter
    * a ready to read, write or error condition state.
    *
@@ -1666,15 +1705,15 @@ public:
    * socket.wait(boost::asio::ip::tcp::socket::wait_read, ec);
    * @endcode
    */
-  BOOST_ASIO_SYNC_OP_VOID wait(wait_type w, boost::system::error_code& ec)
-  {
-    this->get_service().wait(this->get_implementation(), w, ec);
-    BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
-  }
+	BOOST_ASIO_SYNC_OP_VOID wait(wait_type w, boost::system::error_code &ec)
+	{
+		this->get_service().wait(this->get_implementation(), w, ec);
+		BOOST_ASIO_SYNC_OP_VOID_RETURN(ec);
+	}
 
-  /// Asynchronously wait for the socket to become ready to read, ready to
-  /// write, or to have pending error conditions.
-  /**
+	/// Asynchronously wait for the socket to become ready to read, ready to
+	/// write, or to have pending error conditions.
+	/**
    * This function is used to perform an asynchronous wait for a socket to enter
    * a ready to read, write or error condition state.
    *
@@ -1708,43 +1747,42 @@ public:
    * socket.async_wait(boost::asio::ip::tcp::socket::wait_read, wait_handler);
    * @endcode
    */
-  template <typename WaitHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(WaitHandler,
-      void (boost::system::error_code))
-  async_wait(wait_type w, BOOST_ASIO_MOVE_ARG(WaitHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a WaitHandler.
-    BOOST_ASIO_WAIT_HANDLER_CHECK(WaitHandler, handler) type_check;
+	template <typename WaitHandler>
+	BOOST_ASIO_INITFN_RESULT_TYPE(WaitHandler,
+				      void(boost::system::error_code))
+	async_wait(wait_type w, BOOST_ASIO_MOVE_ARG(WaitHandler) handler)
+	{
+		// If you get an error on the following line it means that your handler does
+		// not meet the documented type requirements for a WaitHandler.
+		BOOST_ASIO_WAIT_HANDLER_CHECK(WaitHandler, handler) type_check;
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().async_wait(this->get_implementation(),
-        w, BOOST_ASIO_MOVE_CAST(WaitHandler)(handler));
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    async_completion<WaitHandler,
-      void (boost::system::error_code)> init(handler);
+		return this->get_service().async_wait(
+		    this->get_implementation(), w,
+		    BOOST_ASIO_MOVE_CAST(WaitHandler)(handler));
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		async_completion<WaitHandler, void(boost::system::error_code)>
+		    init(handler);
 
-    this->get_service().async_wait(this->get_implementation(),
-        w, init.completion_handler);
+		this->get_service().async_wait(this->get_implementation(), w,
+					       init.completion_handler);
 
-    return init.result.get();
+		return init.result.get();
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  }
+	}
 
 protected:
-  /// Protected destructor to prevent deletion through this type.
-  /**
+	/// Protected destructor to prevent deletion through this type.
+	/**
    * This function destroys the socket, cancelling any outstanding asynchronous
    * operations associated with the socket as if by calling @c cancel.
    */
-  ~basic_socket()
-  {
-  }
+	~basic_socket() {}
 
 private:
-  // Disallow copying and assignment.
-  basic_socket(const basic_socket&) BOOST_ASIO_DELETED;
-  basic_socket& operator=(const basic_socket&) BOOST_ASIO_DELETED;
+	// Disallow copying and assignment.
+	basic_socket(const basic_socket &) BOOST_ASIO_DELETED;
+	basic_socket &operator=(const basic_socket &) BOOST_ASIO_DELETED;
 };
 
 } // namespace asio
@@ -1753,7 +1791,7 @@ private:
 #include <boost/asio/detail/pop_options.hpp>
 
 #if !defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-# undef BOOST_ASIO_SVC_T
+#undef BOOST_ASIO_SVC_T
 #endif // !defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 
 #endif // BOOST_ASIO_BASIC_SOCKET_HPP

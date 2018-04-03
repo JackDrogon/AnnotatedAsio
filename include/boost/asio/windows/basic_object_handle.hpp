@@ -13,15 +13,15 @@
 #define BOOST_ASIO_WINDOWS_BASIC_OBJECT_HANDLE_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 
-#if defined(BOOST_ASIO_HAS_WINDOWS_OBJECT_HANDLE) \
-  || defined(GENERATING_DOCUMENTATION)
+#if defined(BOOST_ASIO_HAS_WINDOWS_OBJECT_HANDLE) ||                           \
+    defined(GENERATING_DOCUMENTATION)
 
 #include <boost/asio/detail/throw_error.hpp>
 #include <boost/asio/error.hpp>
@@ -30,9 +30,12 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace windows {
+namespace boost
+{
+namespace asio
+{
+namespace windows
+{
 
 /// Provides object-oriented handle functionality.
 /**
@@ -44,27 +47,27 @@ namespace windows {
  * @e Shared @e objects: Unsafe.
  */
 template <typename ObjectHandleService = object_handle_service>
-class basic_object_handle
-  : public basic_handle<ObjectHandleService>
+class basic_object_handle : public basic_handle<ObjectHandleService>
 {
 public:
-  /// The native representation of a handle.
-  typedef typename ObjectHandleService::native_handle_type native_handle_type;
+	/// The native representation of a handle.
+	typedef
+	    typename ObjectHandleService::native_handle_type native_handle_type;
 
-  /// Construct a basic_object_handle without opening it.
-  /**
+	/// Construct a basic_object_handle without opening it.
+	/**
    * This constructor creates an object handle without opening it.
    *
    * @param io_context The io_context object that the object handle will use to
    * dispatch handlers for any asynchronous operations performed on the handle.
    */
-  explicit basic_object_handle(boost::asio::io_context& io_context)
-    : basic_handle<ObjectHandleService>(io_context)
-  {
-  }
+	explicit basic_object_handle(boost::asio::io_context &io_context)
+	    : basic_handle<ObjectHandleService>(io_context)
+	{
+	}
 
-  /// Construct a basic_object_handle on an existing native handle.
-  /**
+	/// Construct a basic_object_handle on an existing native handle.
+	/**
    * This constructor creates an object handle object to hold an existing native
    * handle.
    *
@@ -75,15 +78,15 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_object_handle(boost::asio::io_context& io_context,
-      const native_handle_type& native_handle)
-    : basic_handle<ObjectHandleService>(io_context, native_handle)
-  {
-  }
+	basic_object_handle(boost::asio::io_context &io_context,
+			    const native_handle_type &native_handle)
+	    : basic_handle<ObjectHandleService>(io_context, native_handle)
+	{
+	}
 
 #if defined(BOOST_ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
-  /// Move-construct a basic_object_handle from another.
-  /**
+	/// Move-construct a basic_object_handle from another.
+	/**
    * This constructor moves an object handle from one object to another.
    *
    * @param other The other basic_object_handle object from which the move will
@@ -92,14 +95,14 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_object_handle(io_context&) constructor.
    */
-  basic_object_handle(basic_object_handle&& other)
-    : basic_handle<ObjectHandleService>(
-        BOOST_ASIO_MOVE_CAST(basic_object_handle)(other))
-  {
-  }
+	basic_object_handle(basic_object_handle &&other)
+	    : basic_handle<ObjectHandleService>(
+		  BOOST_ASIO_MOVE_CAST(basic_object_handle)(other))
+	{
+	}
 
-  /// Move-assign a basic_object_handle from another.
-  /**
+	/// Move-assign a basic_object_handle from another.
+	/**
    * This assignment operator moves an object handle from one object to another.
    *
    * @param other The other basic_object_handle object from which the move will
@@ -108,44 +111,44 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_object_handle(io_context&) constructor.
    */
-  basic_object_handle& operator=(basic_object_handle&& other)
-  {
-    basic_handle<ObjectHandleService>::operator=(
-        BOOST_ASIO_MOVE_CAST(basic_object_handle)(other));
-    return *this;
-  }
+	basic_object_handle &operator=(basic_object_handle &&other)
+	{
+		basic_handle<ObjectHandleService>::operator=(
+		    BOOST_ASIO_MOVE_CAST(basic_object_handle)(other));
+		return *this;
+	}
 #endif // defined(BOOST_ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
 
-  /// Perform a blocking wait on the object handle.
-  /**
+	/// Perform a blocking wait on the object handle.
+	/**
    * This function is used to wait for the object handle to be set to the
    * signalled state. This function blocks and does not return until the object
    * handle has been set to the signalled state.
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  void wait()
-  {
-    boost::system::error_code ec;
-    this->get_service().wait(this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, "wait");
-  }
+	void wait()
+	{
+		boost::system::error_code ec;
+		this->get_service().wait(this->get_implementation(), ec);
+		boost::asio::detail::throw_error(ec, "wait");
+	}
 
-  /// Perform a blocking wait on the object handle.
-  /**
+	/// Perform a blocking wait on the object handle.
+	/**
    * This function is used to wait for the object handle to be set to the
    * signalled state. This function blocks and does not return until the object
    * handle has been set to the signalled state.
    *
    * @param ec Set to indicate what error occurred, if any.
    */
-  void wait(boost::system::error_code& ec)
-  {
-    this->get_service().wait(this->get_implementation(), ec);
-  }
+	void wait(boost::system::error_code &ec)
+	{
+		this->get_service().wait(this->get_implementation(), ec);
+	}
 
-  /// Start an asynchronous wait on the object handle.
-  /**
+	/// Start an asynchronous wait on the object handle.
+	/**
    * This function is be used to initiate an asynchronous wait against the
    * object handle. It always returns immediately.
    *
@@ -160,14 +163,15 @@ public:
    * of the handler will be performed in a manner equivalent to using
    * boost::asio::io_context::post().
    */
-  template <typename WaitHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(WaitHandler,
-      void (boost::system::error_code))
-  async_wait(BOOST_ASIO_MOVE_ARG(WaitHandler) handler)
-  {
-    return this->get_service().async_wait(this->get_implementation(),
-        BOOST_ASIO_MOVE_CAST(WaitHandler)(handler));
-  }
+	template <typename WaitHandler>
+	BOOST_ASIO_INITFN_RESULT_TYPE(WaitHandler,
+				      void(boost::system::error_code))
+	async_wait(BOOST_ASIO_MOVE_ARG(WaitHandler) handler)
+	{
+		return this->get_service().async_wait(
+		    this->get_implementation(),
+		    BOOST_ASIO_MOVE_CAST(WaitHandler)(handler));
+	}
 };
 
 } // namespace windows
@@ -176,7 +180,7 @@ public:
 
 #include <boost/asio/detail/pop_options.hpp>
 
-#endif // defined(BOOST_ASIO_HAS_WINDOWS_OBJECT_HANDLE)
+#endif // defined(BOOST_ASIO_HAS_WINDOWS_OBJECT_HANDLE)                        \
        //   || defined(GENERATING_DOCUMENTATION)
 
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)

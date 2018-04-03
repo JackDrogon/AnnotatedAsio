@@ -10,7 +10,8 @@
 
 #include "logger_service.hpp"
 
-namespace services {
+namespace services
+{
 
 boost::asio::io_context::id logger_service::id;
 

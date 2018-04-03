@@ -12,7 +12,7 @@
 #define BOOST_ASIO_BASIC_STREAMBUF_FWD_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -21,14 +21,14 @@
 
 #include <memory>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
-template <typename Allocator = std::allocator<char> >
-class basic_streambuf;
+template <typename Allocator = std::allocator<char>> class basic_streambuf;
 
-template <typename Allocator = std::allocator<char> >
-class basic_streambuf_ref;
+template <typename Allocator = std::allocator<char>> class basic_streambuf_ref;
 
 } // namespace asio
 } // namespace boost

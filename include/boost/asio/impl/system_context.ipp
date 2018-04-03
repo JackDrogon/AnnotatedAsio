@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IMPL_SYSTEM_CONTEXT_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -20,51 +20,49 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-
-struct system_context::thread_function
+namespace boost
 {
-  detail::scheduler* scheduler_;
+namespace asio
+{
 
-  void operator()()
-  {
-    boost::system::error_code ec;
-    scheduler_->run(ec);
-  }
+struct system_context::thread_function {
+	detail::scheduler *scheduler_;
+
+	void operator()()
+	{
+		boost::system::error_code ec;
+		scheduler_->run(ec);
+	}
 };
 
 system_context::system_context()
-  : scheduler_(use_service<detail::scheduler>(*this))
+    : scheduler_(use_service<detail::scheduler>(*this))
 {
-  scheduler_.work_started();
+	scheduler_.work_started();
 
-  thread_function f = { &scheduler_ };
-  std::size_t num_threads = detail::thread::hardware_concurrency() * 2;
-  threads_.create_threads(f, num_threads ? num_threads : 2);
+	thread_function f = {&scheduler_};
+	std::size_t num_threads = detail::thread::hardware_concurrency() * 2;
+	threads_.create_threads(f, num_threads ? num_threads : 2);
 }
 
 system_context::~system_context()
 {
-  scheduler_.work_finished();
-  scheduler_.stop();
-  threads_.join();
+	scheduler_.work_finished();
+	scheduler_.stop();
+	threads_.join();
 }
 
-void system_context::stop()
-{
-  scheduler_.stop();
-}
+void system_context::stop() { scheduler_.stop(); }
 
 bool system_context::stopped() const BOOST_ASIO_NOEXCEPT
 {
-  return scheduler_.stopped();
+	return scheduler_.stopped();
 }
 
 void system_context::join()
 {
-  scheduler_.work_finished();
-  threads_.join();
+	scheduler_.work_finished();
+	threads_.join();
 }
 
 } // namespace asio

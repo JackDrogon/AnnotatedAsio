@@ -28,90 +28,86 @@
 // windows::object_handle compile and link correctly. Runtime failures are
 // ignored.
 
-namespace windows_object_handle_compile {
-
-void wait_handler(const boost::system::error_code&)
+namespace windows_object_handle_compile
 {
-}
+
+void wait_handler(const boost::system::error_code &) {}
 
 void test()
 {
 #if defined(BOOST_ASIO_HAS_WINDOWS_OBJECT_HANDLE)
-  using namespace boost::asio;
-  namespace win = boost::asio::windows;
+	using namespace boost::asio;
+	namespace win = boost::asio::windows;
 
-  try
-  {
-    io_context ioc;
-    archetypes::lazy_handler lazy;
-    boost::system::error_code ec;
+	try {
+		io_context ioc;
+		archetypes::lazy_handler lazy;
+		boost::system::error_code ec;
 
-    // basic_object_handle constructors.
+		// basic_object_handle constructors.
 
-    win::object_handle handle1(ioc);
-    HANDLE native_handle1 = INVALID_HANDLE_VALUE;
-    win::object_handle handle2(ioc, native_handle1);
-
-#if defined(BOOST_ASIO_HAS_MOVE)
-    win::object_handle handle3(std::move(handle2));
-#endif // defined(BOOST_ASIO_HAS_MOVE)
-
-    // basic_object_handle operators.
+		win::object_handle handle1(ioc);
+		HANDLE native_handle1 = INVALID_HANDLE_VALUE;
+		win::object_handle handle2(ioc, native_handle1);
 
 #if defined(BOOST_ASIO_HAS_MOVE)
-    handle1 = win::object_handle(ioc);
-    handle1 = std::move(handle2);
+		win::object_handle handle3(std::move(handle2));
 #endif // defined(BOOST_ASIO_HAS_MOVE)
 
-    // basic_io_object functions.
+		// basic_object_handle operators.
+
+#if defined(BOOST_ASIO_HAS_MOVE)
+		handle1 = win::object_handle(ioc);
+		handle1 = std::move(handle2);
+#endif // defined(BOOST_ASIO_HAS_MOVE)
+
+		// basic_io_object functions.
 
 #if !defined(BOOST_ASIO_NO_DEPRECATED)
-    io_context& ioc_ref = handle1.get_io_context();
-    (void)ioc_ref;
+		io_context &ioc_ref = handle1.get_io_context();
+		(void)ioc_ref;
 #endif // !defined(BOOST_ASIO_NO_DEPRECATED)
 
-    io_context::executor_type ex = handle1.get_executor();
-    (void)ex;
+		io_context::executor_type ex = handle1.get_executor();
+		(void)ex;
 
-    // basic_handle functions.
+		// basic_handle functions.
 
-    win::object_handle::lowest_layer_type& lowest_layer
-      = handle1.lowest_layer();
-    (void)lowest_layer;
+		win::object_handle::lowest_layer_type &lowest_layer =
+		    handle1.lowest_layer();
+		(void)lowest_layer;
 
-    const win::object_handle& handle4 = handle1;
-    const win::object_handle::lowest_layer_type& lowest_layer2
-      = handle4.lowest_layer();
-    (void)lowest_layer2;
+		const win::object_handle &handle4 = handle1;
+		const win::object_handle::lowest_layer_type &lowest_layer2 =
+		    handle4.lowest_layer();
+		(void)lowest_layer2;
 
-    HANDLE native_handle2 = INVALID_HANDLE_VALUE;
-    handle1.assign(native_handle2);
+		HANDLE native_handle2 = INVALID_HANDLE_VALUE;
+		handle1.assign(native_handle2);
 
-    bool is_open = handle1.is_open();
-    (void)is_open;
+		bool is_open = handle1.is_open();
+		(void)is_open;
 
-    handle1.close();
-    handle1.close(ec);
+		handle1.close();
+		handle1.close(ec);
 
-    win::object_handle::native_handle_type native_handle3
-      = handle1.native_handle();
-    (void)native_handle3;
+		win::object_handle::native_handle_type native_handle3 =
+		    handle1.native_handle();
+		(void)native_handle3;
 
-    handle1.cancel();
-    handle1.cancel(ec);
+		handle1.cancel();
+		handle1.cancel(ec);
 
-    // basic_object_handle functions.
+		// basic_object_handle functions.
 
-    handle1.wait();
-    handle1.wait(ec);
+		handle1.wait();
+		handle1.wait(ec);
 
-    handle1.async_wait(&wait_handler);
-    int i1 = handle1.async_wait(lazy);
-    (void)i1;
-  }
-  catch (std::exception&)
-  {
-  }
+		handle1.async_wait(&wait_handler);
+		int i1 = handle1.async_wait(lazy);
+		(void)i1;
+	} catch (std::exception &) {
+	}
 #endif // defined(BOOST_ASIO_HAS_WINDOWS_OBJECT_HANDLE)
 }
 
@@ -119,8 +115,5 @@ void test()
 
 //------------------------------------------------------------------------------
 
-BOOST_ASIO_TEST_SUITE
-(
-  "windows/object_handle",
-  BOOST_ASIO_TEST_CASE(windows_object_handle_compile::test)
-)
+BOOST_ASIO_TEST_SUITE("windows/object_handle",
+		      BOOST_ASIO_TEST_CASE(windows_object_handle_compile::test))

@@ -18,8 +18,4 @@
 
 #include "../unit_test.hpp"
 
-BOOST_ASIO_TEST_SUITE
-(
-  "ip/resolver_service",
-  BOOST_ASIO_TEST_CASE(null_test)
-)
+BOOST_ASIO_TEST_SUITE("ip/resolver_service", BOOST_ASIO_TEST_CASE(null_test))

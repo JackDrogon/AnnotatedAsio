@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_STD_MUTEX_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -25,43 +25,35 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class std_event;
 
-class std_mutex
-  : private noncopyable
+class std_mutex : private noncopyable
 {
 public:
-  typedef boost::asio::detail::scoped_lock<std_mutex> scoped_lock;
+	typedef boost::asio::detail::scoped_lock<std_mutex> scoped_lock;
 
-  // Constructor.
-  std_mutex()
-  {
-  }
+	// Constructor.
+	std_mutex() {}
 
-  // Destructor.
-  ~std_mutex()
-  {
-  }
+	// Destructor.
+	~std_mutex() {}
 
-  // Lock the mutex.
-  void lock()
-  {
-    mutex_.lock();
-  }
+	// Lock the mutex.
+	void lock() { mutex_.lock(); }
 
-  // Unlock the mutex.
-  void unlock()
-  {
-    mutex_.unlock();
-  }
+	// Unlock the mutex.
+	void unlock() { mutex_.unlock(); }
 
 private:
-  friend class std_event;
-  std::mutex mutex_;
+	friend class std_event;
+	std::mutex mutex_;
 };
 
 } // namespace detail

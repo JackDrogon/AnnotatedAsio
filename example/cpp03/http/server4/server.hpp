@@ -18,8 +18,10 @@
 #include <boost/shared_ptr.hpp>
 #include "request_parser.hpp"
 
-namespace http {
-namespace server4 {
+namespace http
+{
+namespace server4
+{
 
 struct request;
 struct reply;
@@ -28,43 +30,44 @@ struct reply;
 class server : boost::asio::coroutine
 {
 public:
-  /// Construct the server to listen on the specified TCP address and port, and
-  /// serve up files from the given directory.
-  explicit server(boost::asio::io_context& io_context,
-      const std::string& address, const std::string& port,
-      boost::function<void(const request&, reply&)> request_handler);
+	/// Construct the server to listen on the specified TCP address and port, and
+	/// serve up files from the given directory.
+	explicit server(
+	    boost::asio::io_context &io_context, const std::string &address,
+	    const std::string &port,
+	    boost::function<void(const request &, reply &)> request_handler);
 
-  /// Perform work associated with the server.
-  void operator()(
-      boost::system::error_code ec = boost::system::error_code(),
-      std::size_t length = 0);
+	/// Perform work associated with the server.
+	void
+	operator()(boost::system::error_code ec = boost::system::error_code(),
+		   std::size_t length = 0);
 
 private:
-  typedef boost::asio::ip::tcp tcp;
+	typedef boost::asio::ip::tcp tcp;
 
-  /// The user-supplied handler for all incoming requests.
-  boost::function<void(const request&, reply&)> request_handler_;
+	/// The user-supplied handler for all incoming requests.
+	boost::function<void(const request &, reply &)> request_handler_;
 
-  /// Acceptor used to listen for incoming connections.
-  boost::shared_ptr<tcp::acceptor> acceptor_;
+	/// Acceptor used to listen for incoming connections.
+	boost::shared_ptr<tcp::acceptor> acceptor_;
 
-  /// The current connection from a client.
-  boost::shared_ptr<tcp::socket> socket_;
+	/// The current connection from a client.
+	boost::shared_ptr<tcp::socket> socket_;
 
-  /// Buffer for incoming data.
-  boost::shared_ptr<boost::array<char, 8192> > buffer_;
+	/// Buffer for incoming data.
+	boost::shared_ptr<boost::array<char, 8192>> buffer_;
 
-  /// The incoming request.
-  boost::shared_ptr<request> request_;
+	/// The incoming request.
+	boost::shared_ptr<request> request_;
 
-  /// Whether the request is valid or not.
-  boost::tribool valid_request_;
+	/// Whether the request is valid or not.
+	boost::tribool valid_request_;
 
-  /// The parser for the incoming request.
-  request_parser request_parser_;
+	/// The parser for the incoming request.
+	request_parser request_parser_;
 
-  /// The reply to be sent back to the client.
-  boost::shared_ptr<reply> reply_;
+	/// The reply to be sent back to the client.
+	boost::shared_ptr<reply> reply_;
 };
 
 } // namespace server4

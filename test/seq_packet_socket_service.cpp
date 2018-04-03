@@ -18,8 +18,5 @@
 
 #include "unit_test.hpp"
 
-BOOST_ASIO_TEST_SUITE
-(
-  "seq_packet_socket_service",
-  BOOST_ASIO_TEST_CASE(null_test)
-)
+BOOST_ASIO_TEST_SUITE("seq_packet_socket_service",
+		      BOOST_ASIO_TEST_CASE(null_test))

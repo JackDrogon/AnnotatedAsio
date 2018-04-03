@@ -12,7 +12,7 @@
 #define BOOST_ASIO_USES_EXECUTOR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -20,8 +20,10 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// A special type, similar to std::nothrow_t, used to disambiguate
 /// constructors that accept executor arguments.
@@ -32,12 +34,9 @@ namespace asio {
  * immediately followed by an argument of a type that satisfies the Executor
  * type requirements.
  */
-struct executor_arg_t
-{
-  /// Constructor.
-  BOOST_ASIO_CONSTEXPR executor_arg_t() BOOST_ASIO_NOEXCEPT
-  {
-  }
+struct executor_arg_t {
+	/// Constructor.
+	BOOST_ASIO_CONSTEXPR executor_arg_t() BOOST_ASIO_NOEXCEPT {}
 };
 
 /// A special value, similar to std::nothrow, used to disambiguate constructors
@@ -62,8 +61,8 @@ __declspec(selectany) executor_arg_t executor_arg;
  * type executor_arg_t and the second argument is convertible from type
  * Executor.
  */
-template <typename T, typename Executor>
-struct uses_executor : false_type {};
+template <typename T, typename Executor> struct uses_executor : false_type {
+};
 
 } // namespace asio
 } // namespace boost

@@ -12,7 +12,7 @@
 #define BOOST_ASIO_SSL_RFC2818_VERIFICATION_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -23,9 +23,12 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace ssl {
+namespace boost
+{
+namespace asio
+{
+namespace ssl
+{
 
 /// Verifies a certificate against a hostname according to the rules described
 /// in RFC 2818.
@@ -61,26 +64,25 @@ namespace ssl {
 class rfc2818_verification
 {
 public:
-  /// The type of the function object's result.
-  typedef bool result_type;
+	/// The type of the function object's result.
+	typedef bool result_type;
 
-  /// Constructor.
-  explicit rfc2818_verification(const std::string& host)
-    : host_(host)
-  {
-  }
+	/// Constructor.
+	explicit rfc2818_verification(const std::string &host) : host_(host) {}
 
-  /// Perform certificate verification.
-  BOOST_ASIO_DECL bool operator()(bool preverified, verify_context& ctx) const;
+	/// Perform certificate verification.
+	BOOST_ASIO_DECL bool operator()(bool preverified,
+					verify_context &ctx) const;
 
 private:
-  // Helper function to check a host name against a pattern.
-  BOOST_ASIO_DECL static bool match_pattern(const char* pattern,
-      std::size_t pattern_length, const char* host);
+	// Helper function to check a host name against a pattern.
+	BOOST_ASIO_DECL static bool match_pattern(const char *pattern,
+						  std::size_t pattern_length,
+						  const char *host);
 
-  // Helper function to check a host name against an IPv4 address
-  // The host name to be checked.
-  std::string host_;
+	// Helper function to check a host name against an IPv4 address
+	// The host name to be checked.
+	std::string host_;
 };
 
 } // namespace ssl
@@ -90,7 +92,7 @@ private:
 #include <boost/asio/detail/pop_options.hpp>
 
 #if defined(BOOST_ASIO_HEADER_ONLY)
-# include <boost/asio/ssl/impl/rfc2818_verification.ipp>
+#include <boost/asio/ssl/impl/rfc2818_verification.ipp>
 #endif // defined(BOOST_ASIO_HEADER_ONLY)
 
 #endif // BOOST_ASIO_SSL_RFC2818_VERIFICATION_HPP

@@ -12,7 +12,7 @@
 #define BOOST_ASIO_HANDLER_TYPE_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -20,8 +20,10 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// (Deprecated: Use two-parameter version of async_result.) Default handler
 /// type traits provided for all completion token types.
@@ -34,14 +36,14 @@ namespace asio {
  * This template may be specialised for user-defined completion token types.
  */
 template <typename CompletionToken, typename Signature, typename = void>
-struct handler_type
-{
-  /// The handler type for the specific signature.
-  typedef typename conditional<
-    is_same<CompletionToken, typename decay<CompletionToken>::type>::value,
-    decay<CompletionToken>,
-    handler_type<typename decay<CompletionToken>::type, Signature>
-  >::type::type type;
+struct handler_type {
+	/// The handler type for the specific signature.
+	typedef typename conditional<
+	    is_same<CompletionToken,
+		    typename decay<CompletionToken>::type>::value,
+	    decay<CompletionToken>,
+	    handler_type<typename decay<CompletionToken>::type,
+			 Signature>>::type::type type;
 };
 
 } // namespace asio

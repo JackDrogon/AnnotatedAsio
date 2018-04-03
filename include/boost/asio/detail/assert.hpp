@@ -12,21 +12,21 @@
 #define BOOST_ASIO_DETAIL_ASSERT_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #if defined(BOOST_ASIO_HAS_BOOST_ASSERT)
-# include <boost/assert.hpp>
+#include <boost/assert.hpp>
 #else // defined(BOOST_ASIO_HAS_BOOST_ASSERT)
-# include <cassert>
+#include <cassert>
 #endif // defined(BOOST_ASIO_HAS_BOOST_ASSERT)
 
 #if defined(BOOST_ASIO_HAS_BOOST_ASSERT)
-# define BOOST_ASIO_ASSERT(expr) BOOST_ASSERT(expr)
+#define BOOST_ASIO_ASSERT(expr) BOOST_ASSERT(expr)
 #else // defined(BOOST_ASIO_HAS_BOOST_ASSERT)
-# define BOOST_ASIO_ASSERT(expr) assert(expr)
+#define BOOST_ASIO_ASSERT(expr) assert(expr)
 #endif // defined(BOOST_ASIO_HAS_BOOST_ASSERT)
 
 #endif // BOOST_ASIO_DETAIL_ASSERT_HPP

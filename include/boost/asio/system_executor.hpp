@@ -12,15 +12,17 @@
 #define BOOST_ASIO_SYSTEM_EXECUTOR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 class system_context;
 
@@ -34,27 +36,23 @@ class system_context;
 class system_executor
 {
 public:
-  /// Obtain the underlying execution context.
-  system_context& context() const BOOST_ASIO_NOEXCEPT;
+	/// Obtain the underlying execution context.
+	system_context &context() const BOOST_ASIO_NOEXCEPT;
 
-  /// Inform the executor that it has some outstanding work to do.
-  /**
+	/// Inform the executor that it has some outstanding work to do.
+	/**
    * For the system executor, this is a no-op.
    */
-  void on_work_started() const BOOST_ASIO_NOEXCEPT
-  {
-  }
+	void on_work_started() const BOOST_ASIO_NOEXCEPT {}
 
-  /// Inform the executor that some work is no longer outstanding.
-  /**
+	/// Inform the executor that some work is no longer outstanding.
+	/**
    * For the system executor, this is a no-op.
    */
-  void on_work_finished() const BOOST_ASIO_NOEXCEPT
-  {
-  }
+	void on_work_finished() const BOOST_ASIO_NOEXCEPT {}
 
-  /// Request the system executor to invoke the given function object.
-  /**
+	/// Request the system executor to invoke the given function object.
+	/**
    * This function is used to ask the executor to execute the given function
    * object. The function object will always be executed inside this function.
    *
@@ -65,11 +63,12 @@ public:
    * @param a An allocator that may be used by the executor to allocate the
    * internal storage needed for function invocation.
    */
-  template <typename Function, typename Allocator>
-  void dispatch(BOOST_ASIO_MOVE_ARG(Function) f, const Allocator& a) const;
+	template <typename Function, typename Allocator>
+	void dispatch(BOOST_ASIO_MOVE_ARG(Function) f,
+		      const Allocator &a) const;
 
-  /// Request the system executor to invoke the given function object.
-  /**
+	/// Request the system executor to invoke the given function object.
+	/**
    * This function is used to ask the executor to execute the given function
    * object. The function object will never be executed inside this function.
    * Instead, it will be scheduled to run on an unspecified system thread pool.
@@ -81,11 +80,11 @@ public:
    * @param a An allocator that may be used by the executor to allocate the
    * internal storage needed for function invocation.
    */
-  template <typename Function, typename Allocator>
-  void post(BOOST_ASIO_MOVE_ARG(Function) f, const Allocator& a) const;
+	template <typename Function, typename Allocator>
+	void post(BOOST_ASIO_MOVE_ARG(Function) f, const Allocator &a) const;
 
-  /// Request the system executor to invoke the given function object.
-  /**
+	/// Request the system executor to invoke the given function object.
+	/**
    * This function is used to ask the executor to execute the given function
    * object. The function object will never be executed inside this function.
    * Instead, it will be scheduled to run on an unspecified system thread pool.
@@ -97,28 +96,28 @@ public:
    * @param a An allocator that may be used by the executor to allocate the
    * internal storage needed for function invocation.
    */
-  template <typename Function, typename Allocator>
-  void defer(BOOST_ASIO_MOVE_ARG(Function) f, const Allocator& a) const;
+	template <typename Function, typename Allocator>
+	void defer(BOOST_ASIO_MOVE_ARG(Function) f, const Allocator &a) const;
 
-  /// Compare two executors for equality.
-  /**
+	/// Compare two executors for equality.
+	/**
    * System executors always compare equal.
    */
-  friend bool operator==(const system_executor&,
-      const system_executor&) BOOST_ASIO_NOEXCEPT
-  {
-    return true;
-  }
+	friend bool operator==(const system_executor &,
+			       const system_executor &) BOOST_ASIO_NOEXCEPT
+	{
+		return true;
+	}
 
-  /// Compare two executors for inequality.
-  /**
+	/// Compare two executors for inequality.
+	/**
    * System executors always compare equal.
    */
-  friend bool operator!=(const system_executor&,
-      const system_executor&) BOOST_ASIO_NOEXCEPT
-  {
-    return false;
-  }
+	friend bool operator!=(const system_executor &,
+			       const system_executor &) BOOST_ASIO_NOEXCEPT
+	{
+		return false;
+	}
 };
 
 } // namespace asio

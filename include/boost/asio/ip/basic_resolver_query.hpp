@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IP_BASIC_RESOLVER_QUERY_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -22,9 +22,12 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
 
 /// An query to be passed to a resolver.
 /**
@@ -36,15 +39,14 @@ namespace ip {
  * @e Shared @e objects: Unsafe.
  */
 template <typename InternetProtocol>
-class basic_resolver_query
-  : public resolver_query_base
+class basic_resolver_query : public resolver_query_base
 {
 public:
-  /// The protocol type associated with the endpoint query.
-  typedef InternetProtocol protocol_type;
+	/// The protocol type associated with the endpoint query.
+	typedef InternetProtocol protocol_type;
 
-  /// Construct with specified service name for any protocol.
-  /**
+	/// Construct with specified service name for any protocol.
+	/**
    * This constructor is typically used to perform name resolution for local
    * service binding.
    *
@@ -60,25 +62,24 @@ public:
    * <tt>c:\\windows\\system32\\drivers\\etc\\services</tt>. Operating systems
    * may use additional locations when resolving service names.
    */
-  basic_resolver_query(const std::string& service,
-      resolver_query_base::flags resolve_flags = passive | address_configured)
-    : hints_(),
-      host_name_(),
-      service_name_(service)
-  {
-    typename InternetProtocol::endpoint endpoint;
-    hints_.ai_flags = static_cast<int>(resolve_flags);
-    hints_.ai_family = PF_UNSPEC;
-    hints_.ai_socktype = endpoint.protocol().type();
-    hints_.ai_protocol = endpoint.protocol().protocol();
-    hints_.ai_addrlen = 0;
-    hints_.ai_canonname = 0;
-    hints_.ai_addr = 0;
-    hints_.ai_next = 0;
-  }
+	basic_resolver_query(const std::string &service,
+			     resolver_query_base::flags resolve_flags =
+				 passive | address_configured)
+	    : hints_(), host_name_(), service_name_(service)
+	{
+		typename InternetProtocol::endpoint endpoint;
+		hints_.ai_flags = static_cast<int>(resolve_flags);
+		hints_.ai_family = PF_UNSPEC;
+		hints_.ai_socktype = endpoint.protocol().type();
+		hints_.ai_protocol = endpoint.protocol().protocol();
+		hints_.ai_addrlen = 0;
+		hints_.ai_canonname = 0;
+		hints_.ai_addr = 0;
+		hints_.ai_next = 0;
+	}
 
-  /// Construct with specified service name for a given protocol.
-  /**
+	/// Construct with specified service name for a given protocol.
+	/**
    * This constructor is typically used to perform name resolution for local
    * service binding with a specific protocol version.
    *
@@ -97,25 +98,24 @@ public:
    * <tt>c:\\windows\\system32\\drivers\\etc\\services</tt>. Operating systems
    * may use additional locations when resolving service names.
    */
-  basic_resolver_query(const protocol_type& protocol,
-      const std::string& service,
-      resolver_query_base::flags resolve_flags = passive | address_configured)
-    : hints_(),
-      host_name_(),
-      service_name_(service)
-  {
-    hints_.ai_flags = static_cast<int>(resolve_flags);
-    hints_.ai_family = protocol.family();
-    hints_.ai_socktype = protocol.type();
-    hints_.ai_protocol = protocol.protocol();
-    hints_.ai_addrlen = 0;
-    hints_.ai_canonname = 0;
-    hints_.ai_addr = 0;
-    hints_.ai_next = 0;
-  }
+	basic_resolver_query(const protocol_type &protocol,
+			     const std::string &service,
+			     resolver_query_base::flags resolve_flags =
+				 passive | address_configured)
+	    : hints_(), host_name_(), service_name_(service)
+	{
+		hints_.ai_flags = static_cast<int>(resolve_flags);
+		hints_.ai_family = protocol.family();
+		hints_.ai_socktype = protocol.type();
+		hints_.ai_protocol = protocol.protocol();
+		hints_.ai_addrlen = 0;
+		hints_.ai_canonname = 0;
+		hints_.ai_addr = 0;
+		hints_.ai_next = 0;
+	}
 
-  /// Construct with specified host name and service name for any protocol.
-  /**
+	/// Construct with specified host name and service name for any protocol.
+	/**
    * This constructor is typically used to perform name resolution for
    * communication with remote hosts.
    *
@@ -145,25 +145,24 @@ public:
    * <tt>c:\\windows\\system32\\drivers\\etc\\services</tt>. Operating systems
    * may use additional locations when resolving service names.
    */
-  basic_resolver_query(const std::string& host, const std::string& service,
-      resolver_query_base::flags resolve_flags = address_configured)
-    : hints_(),
-      host_name_(host),
-      service_name_(service)
-  {
-    typename InternetProtocol::endpoint endpoint;
-    hints_.ai_flags = static_cast<int>(resolve_flags);
-    hints_.ai_family = BOOST_ASIO_OS_DEF(AF_UNSPEC);
-    hints_.ai_socktype = endpoint.protocol().type();
-    hints_.ai_protocol = endpoint.protocol().protocol();
-    hints_.ai_addrlen = 0;
-    hints_.ai_canonname = 0;
-    hints_.ai_addr = 0;
-    hints_.ai_next = 0;
-  }
+	basic_resolver_query(
+	    const std::string &host, const std::string &service,
+	    resolver_query_base::flags resolve_flags = address_configured)
+	    : hints_(), host_name_(host), service_name_(service)
+	{
+		typename InternetProtocol::endpoint endpoint;
+		hints_.ai_flags = static_cast<int>(resolve_flags);
+		hints_.ai_family = BOOST_ASIO_OS_DEF(AF_UNSPEC);
+		hints_.ai_socktype = endpoint.protocol().type();
+		hints_.ai_protocol = endpoint.protocol().protocol();
+		hints_.ai_addrlen = 0;
+		hints_.ai_canonname = 0;
+		hints_.ai_addr = 0;
+		hints_.ai_next = 0;
+	}
 
-  /// Construct with specified host name and service name for a given protocol.
-  /**
+	/// Construct with specified host name and service name for a given protocol.
+	/**
    * This constructor is typically used to perform name resolution for
    * communication with remote hosts.
    *
@@ -196,45 +195,38 @@ public:
    * <tt>c:\\windows\\system32\\drivers\\etc\\services</tt>. Operating systems
    * may use additional locations when resolving service names.
    */
-  basic_resolver_query(const protocol_type& protocol,
-      const std::string& host, const std::string& service,
-      resolver_query_base::flags resolve_flags = address_configured)
-    : hints_(),
-      host_name_(host),
-      service_name_(service)
-  {
-    hints_.ai_flags = static_cast<int>(resolve_flags);
-    hints_.ai_family = protocol.family();
-    hints_.ai_socktype = protocol.type();
-    hints_.ai_protocol = protocol.protocol();
-    hints_.ai_addrlen = 0;
-    hints_.ai_canonname = 0;
-    hints_.ai_addr = 0;
-    hints_.ai_next = 0;
-  }
+	basic_resolver_query(
+	    const protocol_type &protocol, const std::string &host,
+	    const std::string &service,
+	    resolver_query_base::flags resolve_flags = address_configured)
+	    : hints_(), host_name_(host), service_name_(service)
+	{
+		hints_.ai_flags = static_cast<int>(resolve_flags);
+		hints_.ai_family = protocol.family();
+		hints_.ai_socktype = protocol.type();
+		hints_.ai_protocol = protocol.protocol();
+		hints_.ai_addrlen = 0;
+		hints_.ai_canonname = 0;
+		hints_.ai_addr = 0;
+		hints_.ai_next = 0;
+	}
 
-  /// Get the hints associated with the query.
-  const boost::asio::detail::addrinfo_type& hints() const
-  {
-    return hints_;
-  }
+	/// Get the hints associated with the query.
+	const boost::asio::detail::addrinfo_type &hints() const
+	{
+		return hints_;
+	}
 
-  /// Get the host name associated with the query.
-  std::string host_name() const
-  {
-    return host_name_;
-  }
+	/// Get the host name associated with the query.
+	std::string host_name() const { return host_name_; }
 
-  /// Get the service name associated with the query.
-  std::string service_name() const
-  {
-    return service_name_;
-  }
+	/// Get the service name associated with the query.
+	std::string service_name() const { return service_name_; }
 
 private:
-  boost::asio::detail::addrinfo_type hints_;
-  std::string host_name_;
-  std::string service_name_;
+	boost::asio::detail::addrinfo_type hints_;
+	std::string host_name_;
+	std::string service_name_;
 };
 
 } // namespace ip

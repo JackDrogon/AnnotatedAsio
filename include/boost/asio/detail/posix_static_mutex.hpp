@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_POSIX_STATIC_MUTEX_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -24,36 +24,42 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-struct posix_static_mutex
+namespace boost
 {
-  typedef boost::asio::detail::scoped_lock<posix_static_mutex> scoped_lock;
+namespace asio
+{
+namespace detail
+{
 
-  // Initialise the mutex.
-  void init()
-  {
-    // Nothing to do.
-  }
+struct posix_static_mutex {
+	typedef boost::asio::detail::scoped_lock<posix_static_mutex>
+	    scoped_lock;
 
-  // Lock the mutex.
-  void lock()
-  {
-    (void)::pthread_mutex_lock(&mutex_); // Ignore EINVAL.
-  }
+	// Initialise the mutex.
+	void init()
+	{
+		// Nothing to do.
+	}
 
-  // Unlock the mutex.
-  void unlock()
-  {
-    (void)::pthread_mutex_unlock(&mutex_); // Ignore EINVAL.
-  }
+	// Lock the mutex.
+	void lock()
+	{
+		(void)::pthread_mutex_lock(&mutex_); // Ignore EINVAL.
+	}
 
-  ::pthread_mutex_t mutex_;
+	// Unlock the mutex.
+	void unlock()
+	{
+		(void)::pthread_mutex_unlock(&mutex_); // Ignore EINVAL.
+	}
+
+	::pthread_mutex_t mutex_;
 };
 
-#define BOOST_ASIO_POSIX_STATIC_MUTEX_INIT { PTHREAD_MUTEX_INITIALIZER }
+#define BOOST_ASIO_POSIX_STATIC_MUTEX_INIT                                     \
+	{                                                                      \
+		PTHREAD_MUTEX_INITIALIZER                                      \
+	}
 
 } // namespace detail
 } // namespace asio

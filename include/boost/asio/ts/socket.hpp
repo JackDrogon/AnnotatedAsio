@@ -12,7 +12,7 @@
 #define BOOST_ASIO_TS_SOCKET_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/socket_base.hpp>

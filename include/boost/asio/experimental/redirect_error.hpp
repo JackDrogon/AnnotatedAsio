@@ -12,7 +12,7 @@
 #define BOOST_ASIO_EXPERIMENTAL_REDIRECT_ERROR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -21,9 +21,12 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace experimental {
+namespace boost
+{
+namespace asio
+{
+namespace experimental
+{
 
 /// Completion token type used to specify that an error produced by an
 /// asynchronous operation is captured to an error_code variable.
@@ -31,31 +34,30 @@ namespace experimental {
  * The redirect_error_t class is used to indicate that any error_code produced
  * by an asynchronous operation is captured to a specified variable.
  */
-template <typename CompletionToken>
-class redirect_error_t
+template <typename CompletionToken> class redirect_error_t
 {
 public:
-  /// Constructor. 
-  template <typename T>
-  redirect_error_t(BOOST_ASIO_MOVE_ARG(T) completion_token,
-      boost::system::error_code& ec)
-    : token_(BOOST_ASIO_MOVE_CAST(T)(completion_token)),
-      ec_(ec)
-  {
-  }
+	/// Constructor.
+	template <typename T>
+	redirect_error_t(BOOST_ASIO_MOVE_ARG(T) completion_token,
+			 boost::system::error_code &ec)
+	    : token_(BOOST_ASIO_MOVE_CAST(T)(completion_token)), ec_(ec)
+	{
+	}
 
-//private:
-  CompletionToken token_;
-  boost::system::error_code& ec_;
+	//private:
+	CompletionToken token_;
+	boost::system::error_code &ec_;
 };
 
 /// Create a completion token to capture error_code values to a variable.
 template <typename CompletionToken>
-inline redirect_error_t<typename decay<CompletionToken>::type> redirect_error(
-    CompletionToken&& completion_token, boost::system::error_code& ec)
+inline redirect_error_t<typename decay<CompletionToken>::type>
+redirect_error(CompletionToken &&completion_token,
+	       boost::system::error_code &ec)
 {
-  return redirect_error_t<typename decay<CompletionToken>::type>(
-      BOOST_ASIO_MOVE_CAST(CompletionToken)(completion_token), ec);
+	return redirect_error_t<typename decay<CompletionToken>::type>(
+	    BOOST_ASIO_MOVE_CAST(CompletionToken)(completion_token), ec);
 }
 
 } // namespace experimental

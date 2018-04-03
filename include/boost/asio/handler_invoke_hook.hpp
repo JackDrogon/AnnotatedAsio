@@ -12,15 +12,17 @@
 #define BOOST_ASIO_HANDLER_INVOKE_HOOK_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /** @defgroup asio_handler_invoke boost::asio::asio_handler_invoke
  *
@@ -64,17 +66,17 @@ namespace asio {
 
 /// Default handler invocation hook used for non-const function objects.
 template <typename Function>
-inline void asio_handler_invoke(Function& function, ...)
+inline void asio_handler_invoke(Function &function, ...)
 {
-  function();
+	function();
 }
 
 /// Default handler invocation hook used for const function objects.
 template <typename Function>
-inline void asio_handler_invoke(const Function& function, ...)
+inline void asio_handler_invoke(const Function &function, ...)
 {
-  Function tmp(function);
-  tmp();
+	Function tmp(function);
+	tmp();
 }
 
 /*@}*/

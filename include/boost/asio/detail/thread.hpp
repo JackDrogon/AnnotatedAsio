@@ -12,43 +12,46 @@
 #define BOOST_ASIO_DETAIL_THREAD_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_thread.hpp>
+#include <boost/asio/detail/null_thread.hpp>
 #elif defined(BOOST_ASIO_WINDOWS)
-# if defined(UNDER_CE)
-#  include <boost/asio/detail/wince_thread.hpp>
-# elif defined(BOOST_ASIO_WINDOWS_APP)
-#  include <boost/asio/detail/winapp_thread.hpp>
-# else
-#  include <boost/asio/detail/win_thread.hpp>
-# endif
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_thread.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_THREAD)
-# include <boost/asio/detail/std_thread.hpp>
+#if defined(UNDER_CE)
+#include <boost/asio/detail/wince_thread.hpp>
+#elif defined(BOOST_ASIO_WINDOWS_APP)
+#include <boost/asio/detail/winapp_thread.hpp>
 #else
-# error Only Windows, POSIX and std::thread are supported!
+#include <boost/asio/detail/win_thread.hpp>
+#endif
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+#include <boost/asio/detail/posix_thread.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_THREAD)
+#include <boost/asio/detail/std_thread.hpp>
+#else
+#error Only Windows, POSIX and std::thread are supported!
 #endif
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if !defined(BOOST_ASIO_HAS_THREADS)
 typedef null_thread thread;
 #elif defined(BOOST_ASIO_WINDOWS)
-# if defined(UNDER_CE)
+#if defined(UNDER_CE)
 typedef wince_thread thread;
-# elif defined(BOOST_ASIO_WINDOWS_APP)
+#elif defined(BOOST_ASIO_WINDOWS_APP)
 typedef winapp_thread thread;
-# else
+#else
 typedef win_thread thread;
-# endif
+#endif
 #elif defined(BOOST_ASIO_HAS_PTHREADS)
 typedef posix_thread thread;
 #elif defined(BOOST_ASIO_HAS_STD_THREAD)

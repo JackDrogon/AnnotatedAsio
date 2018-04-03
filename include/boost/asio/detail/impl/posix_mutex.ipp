@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_IMPL_POSIX_MUTEX_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -25,16 +25,19 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 posix_mutex::posix_mutex()
 {
-  int error = ::pthread_mutex_init(&mutex_, 0);
-  boost::system::error_code ec(error,
-      boost::asio::error::get_system_category());
-  boost::asio::detail::throw_error(ec, "mutex");
+	int error = ::pthread_mutex_init(&mutex_, 0);
+	boost::system::error_code ec(error,
+				     boost::asio::error::get_system_category());
+	boost::asio::detail::throw_error(ec, "mutex");
 }
 
 } // namespace detail

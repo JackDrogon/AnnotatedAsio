@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_IMPL_WINSOCK_INIT_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -26,51 +26,50 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-void winsock_init_base::startup(data& d,
-    unsigned char major, unsigned char minor)
+namespace boost
 {
-  if (::InterlockedIncrement(&d.init_count_) == 1)
-  {
-    WSADATA wsa_data;
-    long result = ::WSAStartup(MAKEWORD(major, minor), &wsa_data);
-    ::InterlockedExchange(&d.result_, result);
-  }
+namespace asio
+{
+namespace detail
+{
+
+void winsock_init_base::startup(data &d, unsigned char major,
+				unsigned char minor)
+{
+	if (::InterlockedIncrement(&d.init_count_) == 1) {
+		WSADATA wsa_data;
+		long result = ::WSAStartup(MAKEWORD(major, minor), &wsa_data);
+		::InterlockedExchange(&d.result_, result);
+	}
 }
 
-void winsock_init_base::manual_startup(data& d)
+void winsock_init_base::manual_startup(data &d)
 {
-  if (::InterlockedIncrement(&d.init_count_) == 1)
-  {
-    ::InterlockedExchange(&d.result_, 0);
-  }
+	if (::InterlockedIncrement(&d.init_count_) == 1) {
+		::InterlockedExchange(&d.result_, 0);
+	}
 }
 
-void winsock_init_base::cleanup(data& d)
+void winsock_init_base::cleanup(data &d)
 {
-  if (::InterlockedDecrement(&d.init_count_) == 0)
-  {
-    ::WSACleanup();
-  }
+	if (::InterlockedDecrement(&d.init_count_) == 0) {
+		::WSACleanup();
+	}
 }
 
-void winsock_init_base::manual_cleanup(data& d)
+void winsock_init_base::manual_cleanup(data &d)
 {
-  ::InterlockedDecrement(&d.init_count_);
+	::InterlockedDecrement(&d.init_count_);
 }
 
-void winsock_init_base::throw_on_error(data& d)
+void winsock_init_base::throw_on_error(data &d)
 {
-  long result = ::InterlockedExchangeAdd(&d.result_, 0);
-  if (result != 0)
-  {
-    boost::system::error_code ec(result,
-        boost::asio::error::get_system_category());
-    boost::asio::detail::throw_error(ec, "winsock");
-  }
+	long result = ::InterlockedExchangeAdd(&d.result_, 0);
+	if (result != 0) {
+		boost::system::error_code ec(
+		    result, boost::asio::error::get_system_category());
+		boost::asio::detail::throw_error(ec, "winsock");
+	}
 }
 
 } // namespace detail

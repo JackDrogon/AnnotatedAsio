@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_STD_GLOBAL_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -24,41 +24,34 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-template <typename T>
-struct std_global_impl
+namespace boost
 {
-  // Helper function to perform initialisation.
-  static void do_init()
-  {
-    instance_.ptr_ = new T;
-  }
+namespace asio
+{
+namespace detail
+{
 
-  // Destructor automatically cleans up the global.
-  ~std_global_impl()
-  {
-    delete ptr_;
-  }
+template <typename T> struct std_global_impl {
+	// Helper function to perform initialisation.
+	static void do_init() { instance_.ptr_ = new T; }
 
-  static std::once_flag init_once_;
-  static std_global_impl instance_;
-  T* ptr_;
+	// Destructor automatically cleans up the global.
+	~std_global_impl() { delete ptr_; }
+
+	static std::once_flag init_once_;
+	static std_global_impl instance_;
+	T *ptr_;
 };
 
-template <typename T>
-std::once_flag std_global_impl<T>::init_once_;
+template <typename T> std::once_flag std_global_impl<T>::init_once_;
 
-template <typename T>
-std_global_impl<T> std_global_impl<T>::instance_;
+template <typename T> std_global_impl<T> std_global_impl<T>::instance_;
 
-template <typename T>
-T& std_global()
+template <typename T> T &std_global()
 {
-  std::call_once(std_global_impl<T>::init_once_, &std_global_impl<T>::do_init);
-  return *std_global_impl<T>::instance_.ptr_;
+	std::call_once(std_global_impl<T>::init_once_,
+		       &std_global_impl<T>::do_init);
+	return *std_global_impl<T>::instance_.ptr_;
 }
 
 } // namespace detail

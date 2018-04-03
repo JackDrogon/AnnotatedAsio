@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_IMPL_THROW_ERROR_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -22,20 +22,23 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-void do_throw_error(const boost::system::error_code& err)
+namespace boost
 {
-  boost::system::system_error e(err);
-  boost::asio::detail::throw_exception(e);
+namespace asio
+{
+namespace detail
+{
+
+void do_throw_error(const boost::system::error_code &err)
+{
+	boost::system::system_error e(err);
+	boost::asio::detail::throw_exception(e);
 }
 
-void do_throw_error(const boost::system::error_code& err, const char* location)
+void do_throw_error(const boost::system::error_code &err, const char *location)
 {
-  boost::system::system_error e(err, location);
-  boost::asio::detail::throw_exception(e);
+	boost::system::system_error e(err, location);
+	boost::asio::detail::throw_exception(e);
 }
 
 } // namespace detail

@@ -12,7 +12,7 @@
 #define BOOST_ASIO_SSL_IMPL_ERROR_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -21,73 +21,81 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace error {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace error
+{
+namespace detail
+{
 
 class ssl_category : public boost::system::error_category
 {
 public:
-  const char* name() const BOOST_ASIO_ERROR_CATEGORY_NOEXCEPT
-  {
-    return "asio.ssl";
-  }
+	const char *name() const BOOST_ASIO_ERROR_CATEGORY_NOEXCEPT
+	{
+		return "asio.ssl";
+	}
 
-  std::string message(int value) const
-  {
-    const char* s = ::ERR_reason_error_string(value);
-    return s ? s : "asio.ssl error";
-  }
+	std::string message(int value) const
+	{
+		const char *s = ::ERR_reason_error_string(value);
+		return s ? s : "asio.ssl error";
+	}
 };
 
 } // namespace detail
 
-const boost::system::error_category& get_ssl_category()
+const boost::system::error_category &get_ssl_category()
 {
-  static detail::ssl_category instance;
-  return instance;
+	static detail::ssl_category instance;
+	return instance;
 }
 
 } // namespace error
-namespace ssl {
-namespace error {
+namespace ssl
+{
+namespace error
+{
 
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L) && !defined(OPENSSL_IS_BORINGSSL)
 
-const boost::system::error_category& get_stream_category()
+const boost::system::error_category &get_stream_category()
 {
-  return boost::asio::error::get_ssl_category();
+	return boost::asio::error::get_ssl_category();
 }
 
 #else
 
-namespace detail {
+namespace detail
+{
 
 class stream_category : public boost::system::error_category
 {
 public:
-  const char* name() const BOOST_ASIO_ERROR_CATEGORY_NOEXCEPT
-  {
-    return "asio.ssl.stream";
-  }
+	const char *name() const BOOST_ASIO_ERROR_CATEGORY_NOEXCEPT
+	{
+		return "asio.ssl.stream";
+	}
 
-  std::string message(int value) const
-  {
-    switch (value)
-    {
-    case stream_truncated: return "stream truncated";
-    default: return "asio.ssl.stream error";
-    }
-  }
+	std::string message(int value) const
+	{
+		switch (value) {
+		case stream_truncated:
+			return "stream truncated";
+		default:
+			return "asio.ssl.stream error";
+		}
+	}
 };
 
 } // namespace detail
 
-const boost::system::error_category& get_stream_category()
+const boost::system::error_category &get_stream_category()
 {
-  static detail::stream_category instance;
-  return instance;
+	static detail::stream_category instance;
+	return instance;
 }
 
 #endif

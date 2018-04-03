@@ -12,14 +12,15 @@
 #define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
-template <typename Stream>
-class buffered_read_stream;
+template <typename Stream> class buffered_read_stream;
 
 } // namespace asio
 } // namespace boost

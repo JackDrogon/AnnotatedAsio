@@ -15,29 +15,30 @@
 #include <vector>
 #include "header.hpp"
 
-namespace http {
-namespace server4 {
+namespace http
+{
+namespace server4
+{
 
 /// A request received from a client.
-struct request
-{
-  /// The request method, e.g. "GET", "POST".
-  std::string method;
+struct request {
+	/// The request method, e.g. "GET", "POST".
+	std::string method;
 
-  /// The requested URI, such as a path to a file.
-  std::string uri;
+	/// The requested URI, such as a path to a file.
+	std::string uri;
 
-  /// Major version number, usually 1.
-  int http_version_major;
+	/// Major version number, usually 1.
+	int http_version_major;
 
-  /// Minor version number, usually 0 or 1.
-  int http_version_minor;
+	/// Minor version number, usually 0 or 1.
+	int http_version_minor;
 
-  /// The headers included with the request.
-  std::vector<header> headers;
+	/// The headers included with the request.
+	std::vector<header> headers;
 
-  /// The optional content sent with the request.
-  std::string content;
+	/// The optional content sent with the request.
+	std::string content;
 };
 
 } // namespace server4

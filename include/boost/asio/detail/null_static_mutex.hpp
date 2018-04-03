@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_NULL_STATIC_MUTEX_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -23,33 +23,32 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-struct null_static_mutex
+namespace boost
 {
-  typedef boost::asio::detail::scoped_lock<null_static_mutex> scoped_lock;
+namespace asio
+{
+namespace detail
+{
 
-  // Initialise the mutex.
-  void init()
-  {
-  }
+struct null_static_mutex {
+	typedef boost::asio::detail::scoped_lock<null_static_mutex> scoped_lock;
 
-  // Lock the mutex.
-  void lock()
-  {
-  }
+	// Initialise the mutex.
+	void init() {}
 
-  // Unlock the mutex.
-  void unlock()
-  {
-  }
+	// Lock the mutex.
+	void lock() {}
 
-  int unused_;
+	// Unlock the mutex.
+	void unlock() {}
+
+	int unused_;
 };
 
-#define BOOST_ASIO_NULL_STATIC_MUTEX_INIT { 0 }
+#define BOOST_ASIO_NULL_STATIC_MUTEX_INIT                                      \
+	{                                                                      \
+		0                                                              \
+	}
 
 } // namespace detail
 } // namespace asio

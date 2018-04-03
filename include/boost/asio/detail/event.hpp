@@ -12,26 +12,29 @@
 #define BOOST_ASIO_DETAIL_EVENT_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
+#include <boost/asio/detail/null_event.hpp>
 #elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
+#include <boost/asio/detail/win_event.hpp>
 #elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
+#include <boost/asio/detail/posix_event.hpp>
 #elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
+#include <boost/asio/detail/std_event.hpp>
 #else
-# error Only Windows, POSIX and std::condition_variable are supported!
+#error Only Windows, POSIX and std::condition_variable are supported!
 #endif
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if !defined(BOOST_ASIO_HAS_THREADS)
 typedef null_event event;

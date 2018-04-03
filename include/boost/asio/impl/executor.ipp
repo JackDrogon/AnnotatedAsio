@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IMPL_EXECUTOR_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -20,16 +20,16 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-
-bad_executor::bad_executor() BOOST_ASIO_NOEXCEPT
+namespace boost
 {
-}
-
-const char* bad_executor::what() const BOOST_ASIO_NOEXCEPT_OR_NOTHROW
+namespace asio
 {
-  return "bad executor";
+
+bad_executor::bad_executor() BOOST_ASIO_NOEXCEPT {}
+
+const char *bad_executor::what() const BOOST_ASIO_NOEXCEPT_OR_NOTHROW
+{
+	return "bad executor";
 }
 
 } // namespace asio

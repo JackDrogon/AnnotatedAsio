@@ -18,8 +18,4 @@
 
 #include "unit_test.hpp"
 
-BOOST_ASIO_TEST_SUITE
-(
-  "packaged_task",
-  BOOST_ASIO_TEST_CASE(null_test)
-)
+BOOST_ASIO_TEST_SUITE("packaged_task", BOOST_ASIO_TEST_CASE(null_test))

@@ -18,8 +18,5 @@
 
 #include "unit_test.hpp"
 
-BOOST_ASIO_TEST_SUITE
-(
-  "socket_acceptor_service",
-  BOOST_ASIO_TEST_CASE(null_test)
-)
+BOOST_ASIO_TEST_SUITE("socket_acceptor_service",
+		      BOOST_ASIO_TEST_CASE(null_test))

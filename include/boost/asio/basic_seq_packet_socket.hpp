@@ -12,7 +12,7 @@
 #define BOOST_ASIO_BASIC_SEQ_PACKET_SOCKET_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -23,13 +23,15 @@
 #include <boost/asio/error.hpp>
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-# include <boost/asio/seq_packet_socket_service.hpp>
+#include <boost/asio/seq_packet_socket_service.hpp>
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Provides sequenced packet socket functionality.
 /**
@@ -40,28 +42,28 @@ namespace asio {
  * @e Distinct @e objects: Safe.@n
  * @e Shared @e objects: Unsafe.
  */
-template <typename Protocol
-    BOOST_ASIO_SVC_TPARAM_DEF1(= seq_packet_socket_service<Protocol>)>
+template <typename Protocol BOOST_ASIO_SVC_TPARAM_DEF1(
+    = seq_packet_socket_service<Protocol>)>
 class basic_seq_packet_socket
-  : public basic_socket<Protocol BOOST_ASIO_SVC_TARG>
+    : public basic_socket<Protocol BOOST_ASIO_SVC_TARG>
 {
 public:
-  /// The native representation of a socket.
+	/// The native representation of a socket.
 #if defined(GENERATING_DOCUMENTATION)
-  typedef implementation_defined native_handle_type;
+	typedef implementation_defined native_handle_type;
 #else
-  typedef typename basic_socket<
-    Protocol BOOST_ASIO_SVC_TARG>::native_handle_type native_handle_type;
+	typedef typename basic_socket<Protocol BOOST_ASIO_SVC_TARG>::
+	    native_handle_type native_handle_type;
 #endif
 
-  /// The protocol type.
-  typedef Protocol protocol_type;
+	/// The protocol type.
+	typedef Protocol protocol_type;
 
-  /// The endpoint type.
-  typedef typename Protocol::endpoint endpoint_type;
+	/// The endpoint type.
+	typedef typename Protocol::endpoint endpoint_type;
 
-  /// Construct a basic_seq_packet_socket without opening it.
-  /**
+	/// Construct a basic_seq_packet_socket without opening it.
+	/**
    * This constructor creates a sequenced packet socket without opening it. The
    * socket needs to be opened and then connected or accepted before data can
    * be sent or received on it.
@@ -70,13 +72,13 @@ public:
    * will use to dispatch handlers for any asynchronous operations performed on
    * the socket.
    */
-  explicit basic_seq_packet_socket(boost::asio::io_context& io_context)
-    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context)
-  {
-  }
+	explicit basic_seq_packet_socket(boost::asio::io_context &io_context)
+	    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context)
+	{
+	}
 
-  /// Construct and open a basic_seq_packet_socket.
-  /**
+	/// Construct and open a basic_seq_packet_socket.
+	/**
    * This constructor creates and opens a sequenced_packet socket. The socket
    * needs to be connected or accepted before data can be sent or received on
    * it.
@@ -89,15 +91,15 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_seq_packet_socket(boost::asio::io_context& io_context,
-      const protocol_type& protocol)
-    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context, protocol)
-  {
-  }
+	basic_seq_packet_socket(boost::asio::io_context &io_context,
+				const protocol_type &protocol)
+	    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context, protocol)
+	{
+	}
 
-  /// Construct a basic_seq_packet_socket, opening it and binding it to the
-  /// given local endpoint.
-  /**
+	/// Construct a basic_seq_packet_socket, opening it and binding it to the
+	/// given local endpoint.
+	/**
    * This constructor creates a sequenced packet socket and automatically opens
    * it bound to the specified endpoint on the local machine. The protocol used
    * is the protocol associated with the given endpoint.
@@ -111,14 +113,14 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_seq_packet_socket(boost::asio::io_context& io_context,
-      const endpoint_type& endpoint)
-    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context, endpoint)
-  {
-  }
+	basic_seq_packet_socket(boost::asio::io_context &io_context,
+				const endpoint_type &endpoint)
+	    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context, endpoint)
+	{
+	}
 
-  /// Construct a basic_seq_packet_socket on an existing native socket.
-  /**
+	/// Construct a basic_seq_packet_socket on an existing native socket.
+	/**
    * This constructor creates a sequenced packet socket object to hold an
    * existing native socket.
    *
@@ -132,16 +134,17 @@ public:
    *
    * @throws boost::system::system_error Thrown on failure.
    */
-  basic_seq_packet_socket(boost::asio::io_context& io_context,
-      const protocol_type& protocol, const native_handle_type& native_socket)
-    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(
-        io_context, protocol, native_socket)
-  {
-  }
+	basic_seq_packet_socket(boost::asio::io_context &io_context,
+				const protocol_type &protocol,
+				const native_handle_type &native_socket)
+	    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(io_context, protocol,
+							 native_socket)
+	{
+	}
 
 #if defined(BOOST_ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
-  /// Move-construct a basic_seq_packet_socket from another.
-  /**
+	/// Move-construct a basic_seq_packet_socket from another.
+	/**
    * This constructor moves a sequenced packet socket from one object to
    * another.
    *
@@ -151,13 +154,13 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_seq_packet_socket(io_context&) constructor.
    */
-  basic_seq_packet_socket(basic_seq_packet_socket&& other)
-    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(std::move(other))
-  {
-  }
+	basic_seq_packet_socket(basic_seq_packet_socket &&other)
+	    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(std::move(other))
+	{
+	}
 
-  /// Move-assign a basic_seq_packet_socket from another.
-  /**
+	/// Move-assign a basic_seq_packet_socket from another.
+	/**
    * This assignment operator moves a sequenced packet socket from one object to
    * another.
    *
@@ -167,15 +170,16 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_seq_packet_socket(io_context&) constructor.
    */
-  basic_seq_packet_socket& operator=(basic_seq_packet_socket&& other)
-  {
-    basic_socket<Protocol BOOST_ASIO_SVC_TARG>::operator=(std::move(other));
-    return *this;
-  }
+	basic_seq_packet_socket &operator=(basic_seq_packet_socket &&other)
+	{
+		basic_socket<Protocol BOOST_ASIO_SVC_TARG>::operator=(
+		    std::move(other));
+		return *this;
+	}
 
-  /// Move-construct a basic_seq_packet_socket from a socket of another protocol
-  /// type.
-  /**
+	/// Move-construct a basic_seq_packet_socket from a socket of another protocol
+	/// type.
+	/**
    * This constructor moves a sequenced packet socket from one object to
    * another.
    *
@@ -185,17 +189,18 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_seq_packet_socket(io_context&) constructor.
    */
-  template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
-  basic_seq_packet_socket(
-      basic_seq_packet_socket<Protocol1 BOOST_ASIO_SVC_TARG1>&& other,
-      typename enable_if<is_convertible<Protocol1, Protocol>::value>::type* = 0)
-    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(std::move(other))
-  {
-  }
+	template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
+	basic_seq_packet_socket(
+	    basic_seq_packet_socket<Protocol1 BOOST_ASIO_SVC_TARG1> &&other,
+	    typename enable_if<is_convertible<Protocol1, Protocol>::value>::type
+		* = 0)
+	    : basic_socket<Protocol BOOST_ASIO_SVC_TARG>(std::move(other))
+	{
+	}
 
-  /// Move-assign a basic_seq_packet_socket from a socket of another protocol
-  /// type.
-  /**
+	/// Move-assign a basic_seq_packet_socket from a socket of another protocol
+	/// type.
+	/**
    * This assignment operator moves a sequenced packet socket from one object to
    * another.
    *
@@ -205,27 +210,27 @@ public:
    * @note Following the move, the moved-from object is in the same state as if
    * constructed using the @c basic_seq_packet_socket(io_context&) constructor.
    */
-  template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
-  typename enable_if<is_convertible<Protocol1, Protocol>::value,
-      basic_seq_packet_socket>::type& operator=(
-        basic_seq_packet_socket<Protocol1 BOOST_ASIO_SVC_TARG1>&& other)
-  {
-    basic_socket<Protocol BOOST_ASIO_SVC_TARG>::operator=(std::move(other));
-    return *this;
-  }
+	template <typename Protocol1 BOOST_ASIO_SVC_TPARAM1>
+	typename enable_if<is_convertible<Protocol1, Protocol>::value,
+			   basic_seq_packet_socket>::type &
+	operator=(
+	    basic_seq_packet_socket<Protocol1 BOOST_ASIO_SVC_TARG1> &&other)
+	{
+		basic_socket<Protocol BOOST_ASIO_SVC_TARG>::operator=(
+		    std::move(other));
+		return *this;
+	}
 #endif // defined(BOOST_ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
 
-  /// Destroys the socket.
-  /**
+	/// Destroys the socket.
+	/**
    * This function destroys the socket, cancelling any outstanding asynchronous
    * operations associated with the socket as if by calling @c cancel.
    */
-  ~basic_seq_packet_socket()
-  {
-  }
+	~basic_seq_packet_socket() {}
 
-  /// Send some data on the socket.
-  /**
+	/// Send some data on the socket.
+	/**
    * This function is used to send data on the sequenced packet socket. The
    * function call will block until the data has been sent successfully, or an
    * until error occurs.
@@ -247,19 +252,19 @@ public:
    * buffers in one go, and how to use it with arrays, boost::array or
    * std::vector.
    */
-  template <typename ConstBufferSequence>
-  std::size_t send(const ConstBufferSequence& buffers,
-      socket_base::message_flags flags)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->get_service().send(
-        this->get_implementation(), buffers, flags, ec);
-    boost::asio::detail::throw_error(ec, "send");
-    return s;
-  }
+	template <typename ConstBufferSequence>
+	std::size_t send(const ConstBufferSequence &buffers,
+			 socket_base::message_flags flags)
+	{
+		boost::system::error_code ec;
+		std::size_t s = this->get_service().send(
+		    this->get_implementation(), buffers, flags, ec);
+		boost::asio::detail::throw_error(ec, "send");
+		return s;
+	}
 
-  /// Send some data on the socket.
-  /**
+	/// Send some data on the socket.
+	/**
    * This function is used to send data on the sequenced packet socket. The
    * function call will block the data has been sent successfully, or an until
    * error occurs.
@@ -276,16 +281,17 @@ public:
    * Consider using the @ref write function if you need to ensure that all data
    * is written before the blocking operation completes.
    */
-  template <typename ConstBufferSequence>
-  std::size_t send(const ConstBufferSequence& buffers,
-      socket_base::message_flags flags, boost::system::error_code& ec)
-  {
-    return this->get_service().send(
-        this->get_implementation(), buffers, flags, ec);
-  }
+	template <typename ConstBufferSequence>
+	std::size_t send(const ConstBufferSequence &buffers,
+			 socket_base::message_flags flags,
+			 boost::system::error_code &ec)
+	{
+		return this->get_service().send(this->get_implementation(),
+						buffers, flags, ec);
+	}
 
-  /// Start an asynchronous send.
-  /**
+	/// Start an asynchronous send.
+	/**
    * This function is used to asynchronously send data on the sequenced packet
    * socket. The function call always returns immediately.
    *
@@ -317,33 +323,38 @@ public:
    * buffers in one go, and how to use it with arrays, boost::array or
    * std::vector.
    */
-  template <typename ConstBufferSequence, typename WriteHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler,
-      void (boost::system::error_code, std::size_t))
-  async_send(const ConstBufferSequence& buffers,
-      socket_base::message_flags flags,
-      BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a WriteHandler.
-    BOOST_ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler) type_check;
+	template <typename ConstBufferSequence, typename WriteHandler>
+	BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler,
+				      void(boost::system::error_code,
+					   std::size_t))
+	async_send(const ConstBufferSequence &buffers,
+		   socket_base::message_flags flags,
+		   BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
+	{
+		// If you get an error on the following line it means that your handler does
+		// not meet the documented type requirements for a WriteHandler.
+		BOOST_ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler)
+		type_check;
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().async_send(this->get_implementation(),
-        buffers, flags, BOOST_ASIO_MOVE_CAST(WriteHandler)(handler));
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    async_completion<WriteHandler,
-      void (boost::system::error_code, std::size_t)> init(handler);
+		return this->get_service().async_send(
+		    this->get_implementation(), buffers, flags,
+		    BOOST_ASIO_MOVE_CAST(WriteHandler)(handler));
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		async_completion<WriteHandler,
+				 void(boost::system::error_code, std::size_t)>
+		    init(handler);
 
-    this->get_service().async_send(this->get_implementation(),
-        buffers, flags, init.completion_handler);
+		this->get_service().async_send(this->get_implementation(),
+					       buffers, flags,
+					       init.completion_handler);
 
-    return init.result.get();
+		return init.result.get();
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  }
+	}
 
-  /// Receive some data on the socket.
-  /**
+	/// Receive some data on the socket.
+	/**
    * This function is used to receive data on the sequenced packet socket. The
    * function call will block until data has been received successfully, or
    * until an error occurs.
@@ -371,24 +382,24 @@ public:
    * multiple buffers in one go, and how to use it with arrays, boost::array or
    * std::vector.
    */
-  template <typename MutableBufferSequence>
-  std::size_t receive(const MutableBufferSequence& buffers,
-      socket_base::message_flags& out_flags)
-  {
-    boost::system::error_code ec;
+	template <typename MutableBufferSequence>
+	std::size_t receive(const MutableBufferSequence &buffers,
+			    socket_base::message_flags &out_flags)
+	{
+		boost::system::error_code ec;
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    std::size_t s = this->get_service().receive(
-        this->get_implementation(), buffers, 0, out_flags, ec);
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    std::size_t s = this->get_service().receive_with_flags(
-        this->get_implementation(), buffers, 0, out_flags, ec);
+		std::size_t s = this->get_service().receive(
+		    this->get_implementation(), buffers, 0, out_flags, ec);
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		std::size_t s = this->get_service().receive_with_flags(
+		    this->get_implementation(), buffers, 0, out_flags, ec);
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    boost::asio::detail::throw_error(ec, "receive");
-    return s;
-  }
+		boost::asio::detail::throw_error(ec, "receive");
+		return s;
+	}
 
-  /// Receive some data on the socket.
-  /**
+	/// Receive some data on the socket.
+	/**
    * This function is used to receive data on the sequenced packet socket. The
    * function call will block until data has been received successfully, or
    * until an error occurs.
@@ -422,25 +433,27 @@ public:
    * multiple buffers in one go, and how to use it with arrays, boost::array or
    * std::vector.
    */
-  template <typename MutableBufferSequence>
-  std::size_t receive(const MutableBufferSequence& buffers,
-      socket_base::message_flags in_flags,
-      socket_base::message_flags& out_flags)
-  {
-    boost::system::error_code ec;
+	template <typename MutableBufferSequence>
+	std::size_t receive(const MutableBufferSequence &buffers,
+			    socket_base::message_flags in_flags,
+			    socket_base::message_flags &out_flags)
+	{
+		boost::system::error_code ec;
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    std::size_t s = this->get_service().receive(
-        this->get_implementation(), buffers, in_flags, out_flags, ec);
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    std::size_t s = this->get_service().receive_with_flags(
-        this->get_implementation(), buffers, in_flags, out_flags, ec);
+		std::size_t s = this->get_service().receive(
+		    this->get_implementation(), buffers, in_flags, out_flags,
+		    ec);
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		std::size_t s = this->get_service().receive_with_flags(
+		    this->get_implementation(), buffers, in_flags, out_flags,
+		    ec);
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    boost::asio::detail::throw_error(ec, "receive");
-    return s;
-  }
+		boost::asio::detail::throw_error(ec, "receive");
+		return s;
+	}
 
-  /// Receive some data on a connected socket.
-  /**
+	/// Receive some data on a connected socket.
+	/**
    * This function is used to receive data on the sequenced packet socket. The
    * function call will block until data has been received successfully, or
    * until an error occurs.
@@ -462,22 +475,25 @@ public:
    * bytes. Consider using the @ref read function if you need to ensure that the
    * requested amount of data is read before the blocking operation completes.
    */
-  template <typename MutableBufferSequence>
-  std::size_t receive(const MutableBufferSequence& buffers,
-      socket_base::message_flags in_flags,
-      socket_base::message_flags& out_flags, boost::system::error_code& ec)
-  {
+	template <typename MutableBufferSequence>
+	std::size_t receive(const MutableBufferSequence &buffers,
+			    socket_base::message_flags in_flags,
+			    socket_base::message_flags &out_flags,
+			    boost::system::error_code &ec)
+	{
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().receive(this->get_implementation(),
-        buffers, in_flags, out_flags, ec);
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().receive_with_flags(this->get_implementation(),
-        buffers, in_flags, out_flags, ec);
+		return this->get_service().receive(this->get_implementation(),
+						   buffers, in_flags, out_flags,
+						   ec);
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		return this->get_service().receive_with_flags(
+		    this->get_implementation(), buffers, in_flags, out_flags,
+		    ec);
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  }
+	}
 
-  /// Start an asynchronous receive.
-  /**
+	/// Start an asynchronous receive.
+	/**
    * This function is used to asynchronously receive data from the sequenced
    * packet socket. The function call always returns immediately.
    *
@@ -514,35 +530,37 @@ public:
    * multiple buffers in one go, and how to use it with arrays, boost::array or
    * std::vector.
    */
-  template <typename MutableBufferSequence, typename ReadHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
-      void (boost::system::error_code, std::size_t))
-  async_receive(const MutableBufferSequence& buffers,
-      socket_base::message_flags& out_flags,
-      BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a ReadHandler.
-    BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
+	template <typename MutableBufferSequence, typename ReadHandler>
+	BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
+				      void(boost::system::error_code,
+					   std::size_t))
+	async_receive(const MutableBufferSequence &buffers,
+		      socket_base::message_flags &out_flags,
+		      BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
+	{
+		// If you get an error on the following line it means that your handler does
+		// not meet the documented type requirements for a ReadHandler.
+		BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().async_receive(
-        this->get_implementation(), buffers, 0, out_flags,
-        BOOST_ASIO_MOVE_CAST(ReadHandler)(handler));
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    async_completion<ReadHandler,
-      void (boost::system::error_code, std::size_t)> init(handler);
+		return this->get_service().async_receive(
+		    this->get_implementation(), buffers, 0, out_flags,
+		    BOOST_ASIO_MOVE_CAST(ReadHandler)(handler));
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		async_completion<ReadHandler,
+				 void(boost::system::error_code, std::size_t)>
+		    init(handler);
 
-    this->get_service().async_receive_with_flags(
-        this->get_implementation(), buffers, 0, out_flags,
-        init.completion_handler);
+		this->get_service().async_receive_with_flags(
+		    this->get_implementation(), buffers, 0, out_flags,
+		    init.completion_handler);
 
-    return init.result.get();
+		return init.result.get();
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  }
+	}
 
-  /// Start an asynchronous receive.
-  /**
+	/// Start an asynchronous receive.
+	/**
    * This function is used to asynchronously receive data from the sequenced
    * data socket. The function call always returns immediately.
    *
@@ -583,33 +601,35 @@ public:
    * multiple buffers in one go, and how to use it with arrays, boost::array or
    * std::vector.
    */
-  template <typename MutableBufferSequence, typename ReadHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
-      void (boost::system::error_code, std::size_t))
-  async_receive(const MutableBufferSequence& buffers,
-      socket_base::message_flags in_flags,
-      socket_base::message_flags& out_flags,
-      BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a ReadHandler.
-    BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
+	template <typename MutableBufferSequence, typename ReadHandler>
+	BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
+				      void(boost::system::error_code,
+					   std::size_t))
+	async_receive(const MutableBufferSequence &buffers,
+		      socket_base::message_flags in_flags,
+		      socket_base::message_flags &out_flags,
+		      BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
+	{
+		// If you get an error on the following line it means that your handler does
+		// not meet the documented type requirements for a ReadHandler.
+		BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
 
 #if defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    return this->get_service().async_receive(
-        this->get_implementation(), buffers, in_flags, out_flags,
-        BOOST_ASIO_MOVE_CAST(ReadHandler)(handler));
-#else // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-    async_completion<ReadHandler,
-      void (boost::system::error_code, std::size_t)> init(handler);
+		return this->get_service().async_receive(
+		    this->get_implementation(), buffers, in_flags, out_flags,
+		    BOOST_ASIO_MOVE_CAST(ReadHandler)(handler));
+#else  // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+		async_completion<ReadHandler,
+				 void(boost::system::error_code, std::size_t)>
+		    init(handler);
 
-    this->get_service().async_receive_with_flags(
-        this->get_implementation(), buffers, in_flags, out_flags,
-        init.completion_handler);
+		this->get_service().async_receive_with_flags(
+		    this->get_implementation(), buffers, in_flags, out_flags,
+		    init.completion_handler);
 
-    return init.result.get();
+		return init.result.get();
 #endif // defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
-  }
+	}
 };
 
 } // namespace asio

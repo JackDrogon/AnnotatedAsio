@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IP_IMPL_HOST_NAME_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -23,28 +23,32 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
 
 std::string host_name()
 {
-  char name[1024];
-  boost::system::error_code ec;
-  if (boost::asio::detail::socket_ops::gethostname(name, sizeof(name), ec) != 0)
-  {
-    boost::asio::detail::throw_error(ec);
-    return std::string();
-  }
-  return std::string(name);
+	char name[1024];
+	boost::system::error_code ec;
+	if (boost::asio::detail::socket_ops::gethostname(name, sizeof(name),
+							 ec) != 0) {
+		boost::asio::detail::throw_error(ec);
+		return std::string();
+	}
+	return std::string(name);
 }
 
-std::string host_name(boost::system::error_code& ec)
+std::string host_name(boost::system::error_code &ec)
 {
-  char name[1024];
-  if (boost::asio::detail::socket_ops::gethostname(name, sizeof(name), ec) != 0)
-    return std::string();
-  return std::string(name);
+	char name[1024];
+	if (boost::asio::detail::socket_ops::gethostname(name, sizeof(name),
+							 ec) != 0)
+		return std::string();
+	return std::string(name);
 }
 
 } // namespace ip

@@ -20,8 +20,4 @@
 
 //------------------------------------------------------------------------------
 
-BOOST_ASIO_TEST_SUITE
-(
-  "ip/address_v6_iterator",
-  BOOST_ASIO_TEST_CASE(null_test)
-)
+BOOST_ASIO_TEST_SUITE("ip/address_v6_iterator", BOOST_ASIO_TEST_CASE(null_test))

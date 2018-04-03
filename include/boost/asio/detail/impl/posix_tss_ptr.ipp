@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_IMPL_POSIX_TSS_PTR_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -25,16 +25,19 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-void posix_tss_ptr_create(pthread_key_t& key)
+namespace boost
 {
-  int error = ::pthread_key_create(&key, 0);
-  boost::system::error_code ec(error,
-      boost::asio::error::get_system_category());
-  boost::asio::detail::throw_error(ec, "tss");
+namespace asio
+{
+namespace detail
+{
+
+void posix_tss_ptr_create(pthread_key_t &key)
+{
+	int error = ::pthread_key_create(&key, 0);
+	boost::system::error_code ec(error,
+				     boost::asio::error::get_system_category());
+	boost::asio::detail::throw_error(ec, "tss");
 }
 
 } // namespace detail

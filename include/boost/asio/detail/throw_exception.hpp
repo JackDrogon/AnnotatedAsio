@@ -12,37 +12,38 @@
 #define BOOST_ASIO_DETAIL_THROW_EXCEPTION_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
 
 #if defined(BOOST_ASIO_HAS_BOOST_THROW_EXCEPTION)
-# include <boost/throw_exception.hpp>
+#include <boost/throw_exception.hpp>
 #endif // defined(BOOST_ASIO_BOOST_THROW_EXCEPTION)
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if defined(BOOST_ASIO_HAS_BOOST_THROW_EXCEPTION)
 using boost::throw_exception;
 #else // defined(BOOST_ASIO_HAS_BOOST_THROW_EXCEPTION)
 
 // Declare the throw_exception function for all targets.
-template <typename Exception>
-void throw_exception(const Exception& e);
+template <typename Exception> void throw_exception(const Exception &e);
 
 // Only define the throw_exception function when exceptions are enabled.
 // Otherwise, it is up to the application to provide a definition of this
 // function.
-# if !defined(BOOST_ASIO_NO_EXCEPTIONS)
-template <typename Exception>
-void throw_exception(const Exception& e)
+#if !defined(BOOST_ASIO_NO_EXCEPTIONS)
+template <typename Exception> void throw_exception(const Exception &e)
 {
-  throw e;
+	throw e;
 }
-# endif // !defined(BOOST_ASIO_NO_EXCEPTIONS)
+#endif // !defined(BOOST_ASIO_NO_EXCEPTIONS)
 
 #endif // defined(BOOST_ASIO_HAS_BOOST_THROW_EXCEPTION)
 

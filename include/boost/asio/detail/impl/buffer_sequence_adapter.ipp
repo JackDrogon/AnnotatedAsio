@@ -12,7 +12,7 @@
 #define BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -26,87 +26,92 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
-class winrt_buffer_impl :
-  public Microsoft::WRL::RuntimeClass<
-    Microsoft::WRL::RuntimeClassFlags<
-      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
-    ABI::Windows::Storage::Streams::IBuffer,
-    Windows::Storage::Streams::IBufferByteAccess>
+class winrt_buffer_impl
+    : public Microsoft::WRL::RuntimeClass<
+	  Microsoft::WRL::RuntimeClassFlags<
+	      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
+	  ABI::Windows::Storage::Streams::IBuffer,
+	  Windows::Storage::Streams::IBufferByteAccess>
 {
 public:
-  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
-  {
-    bytes_ = const_cast<byte*>(static_cast<const byte*>(b.data()));
-    length_ = b.size();
-    capacity_ = b.size();
-  }
+	explicit winrt_buffer_impl(const boost::asio::const_buffer &b)
+	{
+		bytes_ =
+		    const_cast<byte *>(static_cast<const byte *>(b.data()));
+		length_ = b.size();
+		capacity_ = b.size();
+	}
 
-  explicit winrt_buffer_impl(const boost::asio::mutable_buffer& b)
-  {
-    bytes_ = static_cast<byte*>(b.data());
-    length_ = 0;
-    capacity_ = b.size();
-  }
+	explicit winrt_buffer_impl(const boost::asio::mutable_buffer &b)
+	{
+		bytes_ = static_cast<byte *>(b.data());
+		length_ = 0;
+		capacity_ = b.size();
+	}
 
-  ~winrt_buffer_impl()
-  {
-  }
+	~winrt_buffer_impl() {}
 
-  STDMETHODIMP Buffer(byte** value)
-  {
-    *value = bytes_;
-    return S_OK;
-  }
+	STDMETHODIMP Buffer(byte **value)
+	{
+		*value = bytes_;
+		return S_OK;
+	}
 
-  STDMETHODIMP get_Capacity(UINT32* value)
-  {
-    *value = capacity_;
-    return S_OK;
-  }
+	STDMETHODIMP get_Capacity(UINT32 *value)
+	{
+		*value = capacity_;
+		return S_OK;
+	}
 
-  STDMETHODIMP get_Length(UINT32 *value)
-  {
-    *value = length_;
-    return S_OK;
-  }
+	STDMETHODIMP get_Length(UINT32 *value)
+	{
+		*value = length_;
+		return S_OK;
+	}
 
-  STDMETHODIMP put_Length(UINT32 value)
-  {
-    if (value > capacity_)
-      return E_INVALIDARG;
-    length_ = value;
-    return S_OK;
-  }
+	STDMETHODIMP put_Length(UINT32 value)
+	{
+		if (value > capacity_)
+			return E_INVALIDARG;
+		length_ = value;
+		return S_OK;
+	}
 
 private:
-  byte* bytes_;
-  UINT32 length_;
-  UINT32 capacity_;
+	byte *bytes_;
+	UINT32 length_;
+	UINT32 capacity_;
 };
 
 void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::mutable_buffer& buffer)
+    buffer_sequence_adapter_base::native_buffer_type &buf,
+    const boost::asio::mutable_buffer &buffer)
 {
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+	std::memset(&buf, 0, sizeof(native_buffer_type));
+	Microsoft::WRL::ComPtr<IInspectable> insp =
+	    Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+	buf =
+	    reinterpret_cast<Windows::Storage::Streams::IBuffer ^>(insp.Get());
 }
 
 void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::const_buffer& buffer)
+    buffer_sequence_adapter_base::native_buffer_type &buf,
+    const boost::asio::const_buffer &buffer)
 {
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+	std::memset(&buf, 0, sizeof(native_buffer_type));
+	Microsoft::WRL::ComPtr<IInspectable> insp =
+	    Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+	Platform::Object ^ buf_obj =
+	    reinterpret_cast<Platform::Object ^>(insp.Get());
+	buf =
+	    reinterpret_cast<Windows::Storage::Streams::IBuffer ^>(insp.Get());
 }
 
 } // namespace detail

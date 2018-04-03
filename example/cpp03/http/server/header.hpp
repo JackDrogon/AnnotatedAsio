@@ -13,13 +13,14 @@
 
 #include <string>
 
-namespace http {
-namespace server {
-
-struct header
+namespace http
 {
-  std::string name;
-  std::string value;
+namespace server
+{
+
+struct header {
+	std::string name;
+	std::string value;
 };
 
 } // namespace server

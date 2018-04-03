@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IMPL_THREAD_POOL_IPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -20,54 +20,51 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
-
-struct thread_pool::thread_function
+namespace boost
 {
-  detail::scheduler* scheduler_;
+namespace asio
+{
 
-  void operator()()
-  {
-    boost::system::error_code ec;
-    scheduler_->run(ec);
-  }
+struct thread_pool::thread_function {
+	detail::scheduler *scheduler_;
+
+	void operator()()
+	{
+		boost::system::error_code ec;
+		scheduler_->run(ec);
+	}
 };
 
-thread_pool::thread_pool()
-  : scheduler_(use_service<detail::scheduler>(*this))
+thread_pool::thread_pool() : scheduler_(use_service<detail::scheduler>(*this))
 {
-  scheduler_.work_started();
+	scheduler_.work_started();
 
-  thread_function f = { &scheduler_ };
-  std::size_t num_threads = detail::thread::hardware_concurrency() * 2;
-  threads_.create_threads(f, num_threads ? num_threads : 2);
+	thread_function f = {&scheduler_};
+	std::size_t num_threads = detail::thread::hardware_concurrency() * 2;
+	threads_.create_threads(f, num_threads ? num_threads : 2);
 }
 
 thread_pool::thread_pool(std::size_t num_threads)
-  : scheduler_(use_service<detail::scheduler>(*this))
+    : scheduler_(use_service<detail::scheduler>(*this))
 {
-  scheduler_.work_started();
+	scheduler_.work_started();
 
-  thread_function f = { &scheduler_ };
-  threads_.create_threads(f, num_threads);
+	thread_function f = {&scheduler_};
+	threads_.create_threads(f, num_threads);
 }
 
 thread_pool::~thread_pool()
 {
-  stop();
-  join();
+	stop();
+	join();
 }
 
-void thread_pool::stop()
-{
-  scheduler_.stop();
-}
+void thread_pool::stop() { scheduler_.stop(); }
 
 void thread_pool::join()
 {
-  scheduler_.work_finished();
-  threads_.join();
+	scheduler_.work_finished();
+	threads_.join();
 }
 
 } // namespace asio

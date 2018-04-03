@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IS_EXECUTOR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -20,8 +20,10 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// The is_executor trait detects whether a type T meets the Executor type
 /// requirements.
@@ -33,9 +35,9 @@ namespace asio {
 template <typename T>
 struct is_executor
 #if defined(GENERATING_DOCUMENTATION)
-  : integral_constant<bool, automatically_determined>
-#else // defined(GENERATING_DOCUMENTATION)
-  : boost::asio::detail::is_executor<T>
+    : integral_constant<bool, automatically_determined>
+#else  // defined(GENERATING_DOCUMENTATION)
+    : boost::asio::detail::is_executor<T>
 #endif // defined(GENERATING_DOCUMENTATION)
 {
 };

@@ -12,7 +12,7 @@
 #define BOOST_ASIO_IMPL_DEFER_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -22,53 +22,56 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 template <typename CompletionToken>
-BOOST_ASIO_INITFN_RESULT_TYPE(CompletionToken, void()) defer(
-    BOOST_ASIO_MOVE_ARG(CompletionToken) token)
+BOOST_ASIO_INITFN_RESULT_TYPE(CompletionToken, void())
+defer(BOOST_ASIO_MOVE_ARG(CompletionToken) token)
 {
-  typedef BOOST_ASIO_HANDLER_TYPE(CompletionToken, void()) handler;
+	typedef BOOST_ASIO_HANDLER_TYPE(CompletionToken, void()) handler;
 
-  async_completion<CompletionToken, void()> init(token);
+	async_completion<CompletionToken, void()> init(token);
 
-  typename associated_executor<handler>::type ex(
-      (get_associated_executor)(init.completion_handler));
+	typename associated_executor<handler>::type ex(
+	    (get_associated_executor)(init.completion_handler));
 
-  typename associated_allocator<handler>::type alloc(
-      (get_associated_allocator)(init.completion_handler));
+	typename associated_allocator<handler>::type alloc(
+	    (get_associated_allocator)(init.completion_handler));
 
-  ex.defer(BOOST_ASIO_MOVE_CAST(handler)(init.completion_handler), alloc);
+	ex.defer(BOOST_ASIO_MOVE_CAST(handler)(init.completion_handler), alloc);
 
-  return init.result.get();
+	return init.result.get();
 }
 
 template <typename Executor, typename CompletionToken>
-BOOST_ASIO_INITFN_RESULT_TYPE(CompletionToken, void()) defer(
-    const Executor& ex, BOOST_ASIO_MOVE_ARG(CompletionToken) token,
-    typename enable_if<is_executor<Executor>::value>::type*)
+BOOST_ASIO_INITFN_RESULT_TYPE(CompletionToken, void())
+defer(const Executor &ex, BOOST_ASIO_MOVE_ARG(CompletionToken) token,
+      typename enable_if<is_executor<Executor>::value>::type *)
 {
-  typedef BOOST_ASIO_HANDLER_TYPE(CompletionToken, void()) handler;
+	typedef BOOST_ASIO_HANDLER_TYPE(CompletionToken, void()) handler;
 
-  async_completion<CompletionToken, void()> init(token);
+	async_completion<CompletionToken, void()> init(token);
 
-  typename associated_allocator<handler>::type alloc(
-      (get_associated_allocator)(init.completion_handler));
+	typename associated_allocator<handler>::type alloc(
+	    (get_associated_allocator)(init.completion_handler));
 
-  ex.defer(detail::work_dispatcher<handler>(init.completion_handler), alloc);
+	ex.defer(detail::work_dispatcher<handler>(init.completion_handler),
+		 alloc);
 
-  return init.result.get();
+	return init.result.get();
 }
 
 template <typename ExecutionContext, typename CompletionToken>
 inline BOOST_ASIO_INITFN_RESULT_TYPE(CompletionToken, void()) defer(
-    ExecutionContext& ctx, BOOST_ASIO_MOVE_ARG(CompletionToken) token,
-    typename enable_if<is_convertible<
-      ExecutionContext&, execution_context&>::value>::type*)
+    ExecutionContext &ctx, BOOST_ASIO_MOVE_ARG(CompletionToken) token,
+    typename enable_if<
+	is_convertible<ExecutionContext &, execution_context &>::value>::type *)
 {
-  return (defer)(ctx.get_executor(),
-      BOOST_ASIO_MOVE_CAST(CompletionToken)(token));
+	return (defer)(ctx.get_executor(),
+		       BOOST_ASIO_MOVE_CAST(CompletionToken)(token));
 }
 
 } // namespace asio

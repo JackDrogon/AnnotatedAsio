@@ -12,7 +12,7 @@
 #define BOOST_ASIO_SPAWN_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -28,8 +28,10 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Context object the represents the currently executing coroutine.
 /**
@@ -49,71 +51,64 @@ namespace asio {
  * current coroutine. The coroutine is resumed when the asynchronous operation
  * completes, and the result of the operation is returned.
  */
-template <typename Handler>
-class basic_yield_context
+template <typename Handler> class basic_yield_context
 {
 public:
-  /// The coroutine callee type, used by the implementation.
-  /**
+	/// The coroutine callee type, used by the implementation.
+	/**
    * When using Boost.Coroutine v1, this type is:
    * @code typename coroutine<void()> @endcode
    * When using Boost.Coroutine v2 (unidirectional coroutines), this type is:
    * @code push_coroutine<void> @endcode
    */
 #if defined(GENERATING_DOCUMENTATION)
-  typedef implementation_defined callee_type;
+	typedef implementation_defined callee_type;
 #elif defined(BOOST_COROUTINES_UNIDIRECT) || defined(BOOST_COROUTINES_V2)
-  typedef boost::coroutines::push_coroutine<void> callee_type;
+	typedef boost::coroutines::push_coroutine<void> callee_type;
 #else
-  typedef boost::coroutines::coroutine<void()> callee_type;
+	typedef boost::coroutines::coroutine<void()> callee_type;
 #endif
-  
-  /// The coroutine caller type, used by the implementation.
-  /**
+
+	/// The coroutine caller type, used by the implementation.
+	/**
    * When using Boost.Coroutine v1, this type is:
    * @code typename coroutine<void()>::caller_type @endcode
    * When using Boost.Coroutine v2 (unidirectional coroutines), this type is:
    * @code pull_coroutine<void> @endcode
    */
 #if defined(GENERATING_DOCUMENTATION)
-  typedef implementation_defined caller_type;
+	typedef implementation_defined caller_type;
 #elif defined(BOOST_COROUTINES_UNIDIRECT) || defined(BOOST_COROUTINES_V2)
-  typedef boost::coroutines::pull_coroutine<void> caller_type;
+	typedef boost::coroutines::pull_coroutine<void> caller_type;
 #else
-  typedef boost::coroutines::coroutine<void()>::caller_type caller_type;
+	typedef boost::coroutines::coroutine<void()>::caller_type caller_type;
 #endif
 
-  /// Construct a yield context to represent the specified coroutine.
-  /**
+	/// Construct a yield context to represent the specified coroutine.
+	/**
    * Most applications do not need to use this constructor. Instead, the
    * spawn() function passes a yield context as an argument to the coroutine
    * function.
    */
-  basic_yield_context(
-      const detail::weak_ptr<callee_type>& coro,
-      caller_type& ca, Handler& handler)
-    : coro_(coro),
-      ca_(ca),
-      handler_(handler),
-      ec_(0)
-  {
-  }
+	basic_yield_context(const detail::weak_ptr<callee_type> &coro,
+			    caller_type &ca, Handler &handler)
+	    : coro_(coro), ca_(ca), handler_(handler), ec_(0)
+	{
+	}
 
-  /// Construct a yield context from another yield context type.
-  /**
+	/// Construct a yield context from another yield context type.
+	/**
    * Requires that OtherHandler be convertible to Handler.
    */
-  template <typename OtherHandler>
-  basic_yield_context(const basic_yield_context<OtherHandler>& other)
-    : coro_(other.coro_),
-      ca_(other.ca_),
-      handler_(other.handler_),
-      ec_(other.ec_)
-  {
-  }
+	template <typename OtherHandler>
+	basic_yield_context(const basic_yield_context<OtherHandler> &other)
+	    : coro_(other.coro_), ca_(other.ca_), handler_(other.handler_),
+	      ec_(other.ec_)
+	{
+	}
 
-  /// Return a yield context that sets the specified error_code.
-  /**
+	/// Return a yield context that sets the specified error_code.
+	/**
    * By default, when a yield context is used with an asynchronous operation, a
    * non-success error_code is converted to system_error and thrown. This
    * operator may be used to specify an error_code object that should instead be
@@ -131,28 +126,28 @@ public:
    *   ...
    * } @endcode
    */
-  basic_yield_context operator[](boost::system::error_code& ec) const
-  {
-    basic_yield_context tmp(*this);
-    tmp.ec_ = &ec;
-    return tmp;
-  }
+	basic_yield_context operator[](boost::system::error_code &ec) const
+	{
+		basic_yield_context tmp(*this);
+		tmp.ec_ = &ec;
+		return tmp;
+	}
 
 #if defined(GENERATING_DOCUMENTATION)
 private:
 #endif // defined(GENERATING_DOCUMENTATION)
-  detail::weak_ptr<callee_type> coro_;
-  caller_type& ca_;
-  Handler handler_;
-  boost::system::error_code* ec_;
+	detail::weak_ptr<callee_type> coro_;
+	caller_type &ca_;
+	Handler handler_;
+	boost::system::error_code *ec_;
 };
 
 #if defined(GENERATING_DOCUMENTATION)
 /// Context object that represents the currently executing coroutine.
 typedef basic_yield_context<unspecified> yield_context;
-#else // defined(GENERATING_DOCUMENTATION)
-typedef basic_yield_context<
-  executor_binder<void(*)(), executor> > yield_context;
+#else  // defined(GENERATING_DOCUMENTATION)
+typedef basic_yield_context<executor_binder<void (*)(), executor>>
+    yield_context;
 #endif // defined(GENERATING_DOCUMENTATION)
 
 /**
@@ -203,8 +198,8 @@ typedef basic_yield_context<
  */
 template <typename Function>
 void spawn(BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes());
+	   const boost::coroutines::attributes &attributes =
+	       boost::coroutines::attributes());
 
 /// Start a new stackful coroutine, calling the specified handler when it
 /// completes.
@@ -222,12 +217,14 @@ void spawn(BOOST_ASIO_MOVE_ARG(Function) function,
  * @param attributes Boost.Coroutine attributes used to customise the coroutine.
  */
 template <typename Handler, typename Function>
-void spawn(BOOST_ASIO_MOVE_ARG(Handler) handler,
+void spawn(
+    BOOST_ASIO_MOVE_ARG(Handler) handler,
     BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes(),
-    typename enable_if<!is_executor<typename decay<Handler>::type>::value &&
-      !is_convertible<Handler&, execution_context&>::value>::type* = 0);
+    const boost::coroutines::attributes &attributes =
+	boost::coroutines::attributes(),
+    typename enable_if<
+	!is_executor<typename decay<Handler>::type>::value &&
+	!is_convertible<Handler &, execution_context &>::value>::type * = 0);
 
 /// Start a new stackful coroutine, inheriting the execution context of another.
 /**
@@ -246,9 +243,9 @@ void spawn(BOOST_ASIO_MOVE_ARG(Handler) handler,
  */
 template <typename Handler, typename Function>
 void spawn(basic_yield_context<Handler> ctx,
-    BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes());
+	   BOOST_ASIO_MOVE_ARG(Function) function,
+	   const boost::coroutines::attributes &attributes =
+	       boost::coroutines::attributes());
 
 /// Start a new stackful coroutine that executes on a given executor.
 /**
@@ -263,11 +260,10 @@ void spawn(basic_yield_context<Handler> ctx,
  * @param attributes Boost.Coroutine attributes used to customise the coroutine.
  */
 template <typename Function, typename Executor>
-void spawn(const Executor& ex,
-    BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes(),
-    typename enable_if<is_executor<Executor>::value>::type* = 0);
+void spawn(const Executor &ex, BOOST_ASIO_MOVE_ARG(Function) function,
+	   const boost::coroutines::attributes &attributes =
+	       boost::coroutines::attributes(),
+	   typename enable_if<is_executor<Executor>::value>::type * = 0);
 
 /// Start a new stackful coroutine that executes on a given strand.
 /**
@@ -281,10 +277,9 @@ void spawn(const Executor& ex,
  * @param attributes Boost.Coroutine attributes used to customise the coroutine.
  */
 template <typename Function, typename Executor>
-void spawn(const strand<Executor>& ex,
-    BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes());
+void spawn(const strand<Executor> &ex, BOOST_ASIO_MOVE_ARG(Function) function,
+	   const boost::coroutines::attributes &attributes =
+	       boost::coroutines::attributes());
 
 /// Start a new stackful coroutine that executes in the context of a strand.
 /**
@@ -300,10 +295,10 @@ void spawn(const strand<Executor>& ex,
  * @param attributes Boost.Coroutine attributes used to customise the coroutine.
  */
 template <typename Function>
-void spawn(const boost::asio::io_context::strand& s,
-    BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes());
+void spawn(const boost::asio::io_context::strand &s,
+	   BOOST_ASIO_MOVE_ARG(Function) function,
+	   const boost::coroutines::attributes &attributes =
+	       boost::coroutines::attributes());
 
 /// Start a new stackful coroutine that executes on a given execution context.
 /**
@@ -319,12 +314,11 @@ void spawn(const boost::asio::io_context::strand& s,
  * @param attributes Boost.Coroutine attributes used to customise the coroutine.
  */
 template <typename Function, typename ExecutionContext>
-void spawn(ExecutionContext& ctx,
-    BOOST_ASIO_MOVE_ARG(Function) function,
-    const boost::coroutines::attributes& attributes
-      = boost::coroutines::attributes(),
-    typename enable_if<is_convertible<
-      ExecutionContext&, execution_context&>::value>::type* = 0);
+void spawn(ExecutionContext &ctx, BOOST_ASIO_MOVE_ARG(Function) function,
+	   const boost::coroutines::attributes &attributes =
+	       boost::coroutines::attributes(),
+	   typename enable_if<is_convertible<
+	       ExecutionContext &, execution_context &>::value>::type * = 0);
 
 /*@}*/
 

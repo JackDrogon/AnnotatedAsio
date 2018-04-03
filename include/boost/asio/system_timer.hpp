@@ -12,7 +12,7 @@
 #define BOOST_ASIO_SYSTEM_TIMER_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
@@ -22,8 +22,10 @@
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <boost/asio/detail/chrono.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Typedef for a timer based on the system clock.
 /**

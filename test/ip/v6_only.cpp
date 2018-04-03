@@ -28,32 +28,30 @@
 // The following test checks that the ip::v6_only socket option compiles and
 // link correctly. Runtime failures are ignored.
 
-namespace ip_v6_only_compile {
+namespace ip_v6_only_compile
+{
 
 void test()
 {
-  using namespace boost::asio;
-  namespace ip = boost::asio::ip;
+	using namespace boost::asio;
+	namespace ip = boost::asio::ip;
 
-  try
-  {
-    io_context ioc;
-    ip::udp::socket sock(ioc);
+	try {
+		io_context ioc;
+		ip::udp::socket sock(ioc);
 
-    // v6_only class.
+		// v6_only class.
 
-    ip::v6_only v6_only1(true);
-    sock.set_option(v6_only1);
-    ip::v6_only v6_only2;
-    sock.get_option(v6_only2);
-    v6_only1 = true;
-    (void)static_cast<bool>(v6_only1);
-    (void)static_cast<bool>(!v6_only1);
-    (void)static_cast<bool>(v6_only1.value());
-  }
-  catch (std::exception&)
-  {
-  }
+		ip::v6_only v6_only1(true);
+		sock.set_option(v6_only1);
+		ip::v6_only v6_only2;
+		sock.get_option(v6_only2);
+		v6_only1 = true;
+		(void)static_cast<bool>(v6_only1);
+		(void)static_cast<bool>(!v6_only1);
+		(void)static_cast<bool>(v6_only1.value());
+	} catch (std::exception &) {
+	}
 }
 
 } // namespace ip_v6_only_compile
@@ -65,71 +63,67 @@ void test()
 // The following test checks the runtime operation of the ip::v6_only socket
 // option.
 
-namespace ip_v6_only_runtime {
+namespace ip_v6_only_runtime
+{
 
 void test()
 {
-  using namespace boost::asio;
-  namespace ip = boost::asio::ip;
+	using namespace boost::asio;
+	namespace ip = boost::asio::ip;
 
-  io_context ioc;
-  boost::system::error_code ec;
+	io_context ioc;
+	boost::system::error_code ec;
 
-  ip::tcp::endpoint ep_v6(ip::address_v6::loopback(), 0);
-  ip::tcp::acceptor acceptor_v6(ioc);
-  acceptor_v6.open(ep_v6.protocol(), ec);
-  acceptor_v6.bind(ep_v6, ec);
-  bool have_v6 = !ec;
-  acceptor_v6.close(ec);
-  acceptor_v6.open(ep_v6.protocol(), ec);
+	ip::tcp::endpoint ep_v6(ip::address_v6::loopback(), 0);
+	ip::tcp::acceptor acceptor_v6(ioc);
+	acceptor_v6.open(ep_v6.protocol(), ec);
+	acceptor_v6.bind(ep_v6, ec);
+	bool have_v6 = !ec;
+	acceptor_v6.close(ec);
+	acceptor_v6.open(ep_v6.protocol(), ec);
 
-  if (have_v6)
-  {
-    ip::v6_only v6_only1;
-    acceptor_v6.get_option(v6_only1, ec);
-    BOOST_ASIO_CHECK(!ec);
-    bool have_dual_stack = !v6_only1.value();
+	if (have_v6) {
+		ip::v6_only v6_only1;
+		acceptor_v6.get_option(v6_only1, ec);
+		BOOST_ASIO_CHECK(!ec);
+		bool have_dual_stack = !v6_only1.value();
 
-    if (have_dual_stack)
-    {
-      ip::v6_only v6_only2(false);
-      BOOST_ASIO_CHECK(!v6_only2.value());
-      BOOST_ASIO_CHECK(!static_cast<bool>(v6_only2));
-      BOOST_ASIO_CHECK(!v6_only2);
-      acceptor_v6.set_option(v6_only2, ec);
-      BOOST_ASIO_CHECK(!ec);
+		if (have_dual_stack) {
+			ip::v6_only v6_only2(false);
+			BOOST_ASIO_CHECK(!v6_only2.value());
+			BOOST_ASIO_CHECK(!static_cast<bool>(v6_only2));
+			BOOST_ASIO_CHECK(!v6_only2);
+			acceptor_v6.set_option(v6_only2, ec);
+			BOOST_ASIO_CHECK(!ec);
 
-      ip::v6_only v6_only3;
-      acceptor_v6.get_option(v6_only3, ec);
-      BOOST_ASIO_CHECK(!ec);
-      BOOST_ASIO_CHECK(!v6_only3.value());
-      BOOST_ASIO_CHECK(!static_cast<bool>(v6_only3));
-      BOOST_ASIO_CHECK(!v6_only3);
+			ip::v6_only v6_only3;
+			acceptor_v6.get_option(v6_only3, ec);
+			BOOST_ASIO_CHECK(!ec);
+			BOOST_ASIO_CHECK(!v6_only3.value());
+			BOOST_ASIO_CHECK(!static_cast<bool>(v6_only3));
+			BOOST_ASIO_CHECK(!v6_only3);
 
-      ip::v6_only v6_only4(true);
-      BOOST_ASIO_CHECK(v6_only4.value());
-      BOOST_ASIO_CHECK(static_cast<bool>(v6_only4));
-      BOOST_ASIO_CHECK(!!v6_only4);
-      acceptor_v6.set_option(v6_only4, ec);
-      BOOST_ASIO_CHECK(!ec);
+			ip::v6_only v6_only4(true);
+			BOOST_ASIO_CHECK(v6_only4.value());
+			BOOST_ASIO_CHECK(static_cast<bool>(v6_only4));
+			BOOST_ASIO_CHECK(!!v6_only4);
+			acceptor_v6.set_option(v6_only4, ec);
+			BOOST_ASIO_CHECK(!ec);
 
-      ip::v6_only v6_only5;
-      acceptor_v6.get_option(v6_only5, ec);
-      BOOST_ASIO_CHECK(!ec);
-      BOOST_ASIO_CHECK(v6_only5.value());
-      BOOST_ASIO_CHECK(static_cast<bool>(v6_only5));
-      BOOST_ASIO_CHECK(!!v6_only5);
-    }
-  }
+			ip::v6_only v6_only5;
+			acceptor_v6.get_option(v6_only5, ec);
+			BOOST_ASIO_CHECK(!ec);
+			BOOST_ASIO_CHECK(v6_only5.value());
+			BOOST_ASIO_CHECK(static_cast<bool>(v6_only5));
+			BOOST_ASIO_CHECK(!!v6_only5);
+		}
+	}
 }
 
 } // namespace ip_v6_only_runtime
 
 //------------------------------------------------------------------------------
 
-BOOST_ASIO_TEST_SUITE
-(
-  "ip/v6_only",
-  BOOST_ASIO_TEST_CASE(ip_v6_only_compile::test)
-  BOOST_ASIO_TEST_CASE(ip_v6_only_runtime::test)
-)
+BOOST_ASIO_TEST_SUITE("ip/v6_only",
+		      BOOST_ASIO_TEST_CASE(ip_v6_only_compile::test)
+			  BOOST_ASIO_TEST_CASE(ip_v6_only_runtime::test))

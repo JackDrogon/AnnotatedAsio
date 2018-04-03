@@ -25,31 +25,26 @@
 // The following test checks that all host_name functions compile and link
 // correctly. Runtime failures are ignored.
 
-namespace ip_host_name_compile {
+namespace ip_host_name_compile
+{
 
 void test()
 {
-  using namespace boost::asio;
-  namespace ip = boost::asio::ip;
+	using namespace boost::asio;
+	namespace ip = boost::asio::ip;
 
-  try
-  {
-    boost::system::error_code ec;
+	try {
+		boost::system::error_code ec;
 
-    std::string host_name = ip::host_name();
-    std::string host_name2 = ip::host_name(ec);
-  }
-  catch (std::exception&)
-  {
-  }
+		std::string host_name = ip::host_name();
+		std::string host_name2 = ip::host_name(ec);
+	} catch (std::exception &) {
+	}
 }
 
 } // namespace ip_host_name_compile
 
 //------------------------------------------------------------------------------
 
-BOOST_ASIO_TEST_SUITE
-(
-  "ip/host_name",
-  BOOST_ASIO_TEST_CASE(ip_host_name_compile::test)
-)
+BOOST_ASIO_TEST_SUITE("ip/host_name",
+		      BOOST_ASIO_TEST_CASE(ip_host_name_compile::test))
