@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		boost::asio::io_context io_context;
+		boost::asio::io_context io_context(1);
 
 		using namespace std; // For atoi.
 		server s(io_context, atoi(argv[1]));
