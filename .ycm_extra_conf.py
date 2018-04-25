@@ -161,7 +161,7 @@ def AddFlagsForLanguageType(filename, flags):
         extra_flags = various_languages_flags['h'] + AddOSRelatedFlags()
     if extension in ['.c']:
         extra_flags = various_languages_flags['c'] + AddOSRelatedFlags()
-    elif extension in ['.hpp', '.cpp', '.cxx', '.cc', '.C']:
+    elif extension in ['.hpp', '.ipp', '.cpp', '.cxx', '.cc', '.C']:
         extra_flags = various_languages_flags['cpp'] + AddOSRelatedFlags()
 
     return flags + extra_flags
